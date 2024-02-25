@@ -6,6 +6,8 @@ urlpatterns = [
     path('inventario', inventarioView, name='inventario'),
     path('pqrs', pqrsView, name='pqrs' ),
     path('productos', productosView, name='productos'),
-    path('registrarProducto/', registrarProducto)
+    path('registrarProducto/', registrarProducto),
+    path('editarProducto/', edicionProducto),
+    path('eliminarproducto/<codigo>', eliminarProducto)
 
 ]
