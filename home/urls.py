@@ -1,11 +1,11 @@
 from django.urls import path
-from .views import ventaView
-from .views import inventarioView
-from .views import pqrsView
+from .views import *
 
 urlpatterns = [
     path('venta', ventaView, name='venta'),
     path('inventario', inventarioView, name='inventario'),
-    path('pqrs', pqrsView, name='pqrs' )
+    path('pqrs', pqrsView, name='pqrs' ),
+    path('productos', productosView, name='productos'),
+    path('registrarProducto/', registrarProducto)
 
 ]

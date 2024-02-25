@@ -1,4 +1,5 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
+from .models import Producto
 
 # Create your views here.
 
@@ -10,3 +11,16 @@ def inventarioView(request):
 
 def pqrsView(request):
     return render (request, 'home/pqrs.html')
+
+def productosView(request):
+    productoslistados = Producto.objects.all()
+    return render (request, 'home/gestionProductos.html', {"productos": productoslistados})
+
+def registrarProducto(request):
+    codigo=request.POST['txtCodigo']
+    nombre=request.POST['txtNombre']
+    precio=request.POST['numPrecio']
+
+    producto=Producto.objects.create(
+        codigo=codigo, nombre=nombre, precio=precio)
+    return redirect('/home/productos')
