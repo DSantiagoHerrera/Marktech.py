@@ -33,7 +33,6 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Código</th>
                         <th>Nombre</th>
                         <th>Precio</th>
@@ -43,12 +42,11 @@
                 <tbody>
                     {% for c in productos %}
                     <tr>
-                        <td>{{forloop.counter}}</td>
                         <td>{{c.codigo}}</td>
                         <td>{{c.nombre}}</td>
                         <td>{{c.precio}}</td>
-                        <td><a href="editarProducto/{{c.codigo}}" class="btn btn-info">Editar</a></td>
-                        <td><a href="eliminarProducto/{{c.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
+                        <td><a href="/home/edicionProducto/{{c.codigo}}" class="btn btn-info">Editar</a></td>
+                        <td><a href="/home/eliminarProducto/{{c.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
