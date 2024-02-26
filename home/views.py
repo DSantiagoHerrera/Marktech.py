@@ -10,7 +10,14 @@ def inventarioView(request):
     return render (request, 'home/inventario.html' )
 
 def pqrsView(request):
-    return render (request, 'home/pqrs.html')
+    pqrslistados = pqrs.objects.all()
+    return render (request, 'home/pqrs.html', {"pqrs": pqrslistados})
+
+def registrarpqrs(request):
+    nombre=request.POST['txtnombre']
+    apellido=request.POST['txtapellido']
+    tipo=request.POST['txttipo']
+    mensaje=request.POST['txtmensaje']
 
 def productosView(request):
     productoslistados = Producto.objects.all()
