@@ -34,20 +34,23 @@ def registrarProducto(request):
 
 def edicionProducto(request, codigo):
     producto= Producto.objects.get(codigo=codigo)
-    return render(request, "edicionProducto.html", {"producto": producto})
+    return render(request, "home/edicionProducto.html", {"producto": producto})
 
 
-def editarProducto(request):
-    codigo = request.POST['txtCodigo']
-    nombre = request.POST['txtNombre']
-    precio = request.POST['numPrecio']
-
+def editarProducto(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
-    producto.nombre = nombre
-    producto.precio = precio
-    producto.save()
+    if request.method == 'POST':
+        nombre = request.POST['txtNombre']
+        precio = request.POST['numPrecio']
 
-    return redirect('/home/productos')
+        producto.nombre = nombre
+        producto.precio = precio
+        producto.save()
+
+        return redirect('/home/productos')
+
+    return render(request, "home/edicionProducto.html", {"producto": producto})
+
 
 def eliminarProducto(request, codigo):
      producto=Producto.objects.get(codigo=codigo)

@@ -9,7 +9,7 @@ urlpatterns = [
     path('productos', productosView, name='productos'),
     path('registrarProducto/', registrarProducto),
     path('edicionProducto/<codigo>', edicionProducto),
-    path('editarProducto/', editarProducto),
+    path('editarProducto/<codigo>', editarProducto),
     path('eliminarProducto/<codigo>', eliminarProducto)
 
 ]
