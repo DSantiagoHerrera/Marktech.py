@@ -1,23 +1,22 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .models import Producto
+from .models import Producto, Pqrs
 
 # Create your views here.
 
-def ventaView(request):
-    return render(request, 'home/venta.html')
-
-def inventarioView(request):
-    return render (request, 'home/inventario.html' )
-
 def pqrsView(request):
-    pqrslistados = pqrs.objects.all()
+    pqrslistados = Pqrs.objects.all()
     return render (request, 'home/pqrs.html', {"pqrs": pqrslistados})
 
-def registrarpqrs(request):
+def registrarPqrs(request):
+    codigo=request.POST['txtcodigo']
     nombre=request.POST['txtnombre']
-    apellido=request.POST['txtapellido']
-    tipo=request.POST['txttipo']
+    correo=request.POST['txtcorreo']
+    tipoPqrs=request.POST['txttipoPqrs']
     mensaje=request.POST['txtmensaje']
+    
+    pqrs=Pqrs.objects.create(
+        codigo=codigo, nombre=nombre, correo=correo, tipoPqrs=tipoPqrs, mensaje=mensaje)
+    return redirect('/home/pqrs')
 
 def productosView(request):
     productoslistados = Producto.objects.all()
