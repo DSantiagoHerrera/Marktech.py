@@ -9,5 +9,7 @@ urlpatterns = [
     path('edicionProducto/<codigo>/', views.edicionProducto),
     path('editarProducto/<codigo>/', views.editarProducto),
     path('eliminarProducto/<codigo>/', views.eliminarProducto),
-    path('lista_pqrs/', views.lista_pqrs, name='lista_pqrs')
+    path('lista_pqrs/', views.lista_pqrs, name='lista_pqrs'),
+    path('', inicio, name='home'),
+    path('redireccion/', redireccion, name ='redireccion')
 ]
