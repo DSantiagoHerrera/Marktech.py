@@ -19,5 +19,15 @@ class Pqrs(models.Model):
     mensaje = models.CharField(max_length=50)
     
     def __str__(self):
-        texto = "{0} ({2})"
+        texto = "{0} ({1})"
         return texto.format(self.nombre, self.tipoPqrs)
+
+class Venta(models.Model):
+    codigo = models.CharField(primary_key=True, max_length=6)
+    Producto = models.ForeignKey('Producto', on_delete=models.CASCADE)  
+    totalVenta = models.CharField(max_length=50)
+    
+    def __str__(self):
+        texto = "{0} ({1})"
+        return texto.format(self.nomProducto, self.totalVenta)
+
