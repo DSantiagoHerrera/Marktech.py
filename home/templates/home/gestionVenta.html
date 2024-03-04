@@ -1,0 +1,62 @@
+{% extends "./base.html" %}
+
+{% block body %}
+</h4>
+<div id="tablaProductos">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio unitario</th>
+                <th scope="col">Precio total</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+            <!-- Aquí se agregarán las filas de la tabla dinámicamente -->
+        </tbody>
+    </table>
+</div>
+<ul class="list-group mb-3">
+    <li class="list-group-item d-flex justify-content-between lh-sm">
+        <label for="txtProductos">Producto:</label>
+        <select id="txtProductos">
+            <option value="">Selecciona un producto</option>
+            {% for p in producto %}
+            <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" min="1" value="1">
+        <button type="button" onclick="agregarProducto()">Agregar</button>
+    </li>
+</ul>
+<button type="button" onclick="guardarVenta()">Guardar Venta</button>
+<script>
+    function agregarProducto() {
+        var selectProductos = document.getElementById("txtProductos");
+        var codigoProducto = selectProductos.value;
+        var nombreProducto = selectProductos.options[selectProductos.selectedIndex].text;
+        var precioUnitario = parseFloat(selectProductos.options[selectProductos.selectedIndex].getAttribute('data-precio'));
+        var cantidad = parseInt(document.getElementById("cantidad").value);
+        var precioTotal = precioUnitario * cantidad;
+
+        // Redondear el precio total a dos decimales
+        precioTotal = Math.round(precioTotal);
+
+        // Formatear el precio unitario y precio total con el signo de pesos $
+        var precioUnitarioFormateado = precioUnitario.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
+        var precioTotalFormateado = precioTotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
+
+        var fila = "<tr><td>" + nombreProducto + "</td><td>" + cantidad + "</td><td>" + precioUnitarioFormateado + "</td><td>" + precioTotalFormateado + "</td></tr>";
+
+        document.getElementById("cuerpoTabla").innerHTML += fila;
+    }
+</script>
+
+
+
+
+
+{% endblock %}
