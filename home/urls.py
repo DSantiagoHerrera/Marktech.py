@@ -11,5 +11,10 @@ urlpatterns = [
     path('eliminarProducto/<codigo>/', views.eliminarProducto),
     path('lista_pqrs/', views.lista_pqrs, name='lista_pqrs'),
     path('', inicio, name='home'),
-    path('redireccion/', redireccion, name ='redireccion')
+    path('redireccion/', redireccion, name ='redireccion'),
+    path('venta', ventaView, name='venta'),
+    path('registrarVenta/', registrarVenta),
+    path('edicionVenta/<codigo>', edicionVenta),
+    path('editarVenta/<codigo>', editarVenta),
+    path('eliminarVenta/<codigo>', eliminarVenta),
 ]
