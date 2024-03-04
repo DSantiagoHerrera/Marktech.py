@@ -1,13 +1,13 @@
 from django.urls import path
-from .views import *
+from . import views
 
 urlpatterns = [
-    path('pqrs', pqrsView, name='pqrs' ),
-    path('registrarPqrs/', registrarPqrs),
-    path('productos', productosView, name='productos'),
-    path('registrarProducto/', registrarProducto),
-    path('edicionProducto/<codigo>', edicionProducto),
-    path('editarProducto/<codigo>', editarProducto),
-    path('eliminarProducto/<codigo>', eliminarProducto)
-
+    path('pqrs/', views.pqrsView, name='pqrs' ),
+    path('registrarPqrs/', views.registrarPqrs),
+    path('productos/', views.productosView, name='productos'),
+    path('registrarProducto/', views.registrarProducto),
+    path('edicionProducto/<codigo>/', views.edicionProducto),
+    path('editarProducto/<codigo>/', views.editarProducto),
+    path('eliminarProducto/<codigo>/', views.eliminarProducto),
+    path('lista_pqrs/', views.lista_pqrs, name='lista_pqrs')
 ]
