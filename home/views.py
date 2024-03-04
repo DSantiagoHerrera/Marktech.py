@@ -66,6 +66,59 @@ def eliminarProducto(request, codigo):
      
      return redirect('/home/productos')
  
+#Venta ---------------------------------------------------------------------------------------------------------------------
+
+
+def ventaView(request):
+    productosListados = Producto.objects.all()
+    return render(request, 'home/gestionVenta.html', {"producto": productosListados})
+
+
+    '''
+    ventalistada = Venta.objects.all()
+    return render (request, 'home/gestionVenta.html', {"venta": ventalistada})
+    '''
+
+def registrarVenta(request):
+    if request.method == 'POST':
+        productos_seleccionados = request.POST.getlist('productos')
+        productos_seleccionados = Producto.objects.filter(codigo__in=productos_seleccionados)
+        total_venta = sum(producto.precio for producto in productos_seleccionados)
+        venta = Venta(totalVenta=total_venta)
+        venta.save()
+        venta.productos.add(*productos_seleccionados)
+        return redirect('pagina_de_confirmacion')
+    else:
+        productos = Producto.objects.all()
+        return render(request, 'home/gestionVenta.html', {'productos': productos})
+
+def edicionVenta(request, codigo):
+    venta = Venta.objects.get(codigo=codigo)
+    return render(request, "home/edicionVenta.html", {"venta": venta})
+
+
+def editarVenta(request, codigo):
+    venta = Venta.objects.get(codigo=codigo)
+    if request.method == 'POST':
+        productos = request.POST['txtProductos']
+        totalVenta = request.POST['numTotalVenta']
+
+        venta.productos = productos
+        venta.totalVenta = totalVenta
+        venta.save()
+
+        return redirect('/home/venta')
+
+    return render(request, "home/edicionVenta.html", {"venta": venta})
+
+
+def eliminarVenta(request, codigo):
+     producto=Producto.objects.get(codigo=codigo)
+     producto.delete()
+     
+     return redirect('/home/venta')
+
+
 
  
  
