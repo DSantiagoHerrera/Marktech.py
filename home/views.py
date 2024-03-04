@@ -7,6 +7,10 @@ def pqrsView(request):
     pqrslistados = Pqrs.objects.all()
     return render (request, 'home/pqrs.html', {"pqrs": pqrslistados})
 
+def lista_pqrs(request):
+    pqrs_list = Pqrs.objects.all() 
+    return render(request, 'lista_pqrs.html', {'pqrs_list': pqrs_list})
+
 def registrarPqrs(request):
     codigo=request.POST['txtcodigo']
     nombre=request.POST['txtnombre']
