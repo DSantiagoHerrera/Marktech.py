@@ -2,7 +2,12 @@ from django.shortcuts import render, HttpResponse, redirect
 from .models import Producto, Pqrs
 
 # Create your views here.
+def inicio(request):
+    return render(request, 'inicio.html')
 
+def redireccion (request):
+    return render (request, 'redireccion.html')
+    
 def pqrsView(request):
     pqrslistados = Pqrs.objects.all()
     return render (request, 'home/pqrs.html', {"pqrs": pqrslistados})
