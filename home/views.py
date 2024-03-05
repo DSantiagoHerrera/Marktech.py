@@ -31,7 +31,8 @@ def eliminarPqrs(request, codigo):
      pqrs=Pqrs.objects.get(codigo=codigo)
      pqrs.delete()
      
-     return redirect('/home/pqrs')
+     return redirect('/home/lista_pqrs')
+    
 
 def productosView(request):
     productoslistados = Producto.objects.all()
