@@ -15,7 +15,7 @@
                     <th scope="col">Correo</th>
                     <th scope="col">Tipo de PQRS</th>
                     <th scope="col">Mensaje</th>
-                    <th scope="col">Acción</th> <!-- Agregamos una nueva columna para el botón de eliminar -->
+                    <th scope="col">Acción</th> 
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +27,7 @@
                     <td>{{ pqrs.tipoPqrs }}</td>
                     <td>{{ pqrs.mensaje }}</td>
                     <td>
-                        <button class="btn btn-danger">Eliminar</button> <!-- Botón de eliminar -->
+                        <td><a href="/home/eliminarPqrs/{{c.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
                     </td>
                 </tr>
                 {% empty %}
