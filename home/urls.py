@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('pqrs/', views.pqrsView, name='pqrs' ),
     path('registrarPqrs/', views.registrarPqrs),
-    path('eliminarPqrs/', views.eliminarPqrs),
+    path('eliminarPqrs/<codigo>/', views.eliminarPqrs),
     path('productos/', views.productosView, name='productos'),
     path('registrarProducto/', views.registrarProducto),
     path('edicionProducto/<codigo>/', views.edicionProducto),
