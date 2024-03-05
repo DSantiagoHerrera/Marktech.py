@@ -27,6 +27,12 @@ def registrarPqrs(request):
         codigo=codigo, nombre=nombre, correo=correo, tipoPqrs=tipoPqrs, mensaje=mensaje)
     return redirect('/home/pqrs')
 
+def eliminarPqrs(request, codigo):
+     pqrs=Pqrs.objects.get(codigo=codigo)
+     pqrs.delete()
+     
+     return redirect('/home/pqrs')
+
 def productosView(request):
     productoslistados = Producto.objects.all()
     return render (request, 'home/gestionProductos.html', {"productos": productoslistados})
