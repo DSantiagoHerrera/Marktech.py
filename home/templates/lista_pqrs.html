@@ -1,3 +1,5 @@
+{% extends "./home/base.html" %}
+{% block body %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,7 +31,7 @@
                     <td>
                         <td><a href="/home/eliminarPqrs/{{pqrs.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
                     </td>
-                </tr>
+                </tr>s
                 {% empty %}
                 <tr>
                     <td colspan="6">No hay PQRS registradas</td>
@@ -40,3 +42,4 @@
     </div>
 </body>
 </html>
+{% endblock %}
