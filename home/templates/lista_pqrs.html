@@ -15,6 +15,7 @@
                     <th scope="col">Codigo</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Correo</th>
+                    <th scope="col">Telefono</th>
                     <th scope="col">Tipo de PQRS</th>
                     <th scope="col">Mensaje</th>
                     <th scope="col">Acción</th> 
@@ -26,12 +27,13 @@
                     <td>{{ pqrs.codigo }}</td>
                     <td>{{ pqrs.nombre }}</td>
                     <td>{{ pqrs.correo }}</td>
+                    <td>{{ pqrs.telefono }}</td>
                     <td>{{ pqrs.tipoPqrs }}</td>
                     <td>{{ pqrs.mensaje }}</td>
                     <td>
                         <td><a href="/home/eliminarPqrs/{{pqrs.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
                     </td>
-                </tr>s
+                </tr>
                 {% empty %}
                 <tr>
                     <td colspan="6">No hay PQRS registradas</td>
