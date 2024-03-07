@@ -14,8 +14,4 @@ urlpatterns = [
     path('', views.inicio, name='home'),
     path('redireccion/', views.redireccion, name ='redireccion'),
     path('venta', views.ventaView, name='venta'),
-    path('registrarVenta/', views.registrarVenta),
-    path('edicionVenta/<codigo>', views.edicionVenta),
-    path('editarVenta/<codigo>', views.editarVenta),
-    path('eliminarVenta/<codigo>', views.eliminarVenta),
 ]
