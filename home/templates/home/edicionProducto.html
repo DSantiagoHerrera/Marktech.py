@@ -4,8 +4,7 @@
 
 {% block head %}
     {{ block.super }}
-    <style>
-        /* Agregar estilos personalizados aquí si es necesario */
+    <style> 
         .card {
             border: 1px solid #ddd; /* Borde para resaltar el formulario */
             border-radius: 10px; /* Esquinas redondeadas */
@@ -16,23 +15,21 @@
             color: #007bff; /* Color del encabezado */
             text-align: center; /* Centrar el texto */
         }
-
-        /* Agregar más estilos según sea necesario */
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="row justify-content-center mt-4"> <!-- Centrar el formulario en la pantalla -->
+<div class="row justify-content-center mt-4"> 
     <div class="col-md-6">
         <h2>Editar producto</h2>
         <div class="card">
             <div class="card-body">
-                <form action="/home/editarProducto/{{producto.codigo}}" method="POST">
+                <form action="/home/editarProducto/{{producto.codigo}}/" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="txtCodigo">Código</label>
                         <input type="text" id="txtCodigo" name="txtCodigo" value="{{producto.codigo}}" class="form-control" placeholder="Código"
-                            minlength="1" maxlength="6" readonly required>
+                            minlength="1" maxlength="6" required readonly>
                     </div>
                     <div class="form-group">
                         <label for="txtNombre">Nombre</label>
@@ -43,6 +40,11 @@
                         <label for="numPrecio">Precio</label>
                         <input type="number" id="numPrecio" name="numPrecio" value="{{producto.precio}}" class="form-control" placeholder="Precio"
                             min="3" max="999999999" value="" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numPrecio">Stock</label>
+                        <input type="number" id="numStock" name="numStock" value="{{producto.stock}}" class="form-control" placeholder="Stock"
+                            min="3" max="999999999" value="" required readonly>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-success btn-block text-white">Actualizar</button>
