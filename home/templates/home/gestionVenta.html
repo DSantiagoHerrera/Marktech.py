@@ -2,40 +2,69 @@
 
 {% block body %}
 </h4>
-<div id="tablaProductos">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Producto</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Precio unitario</th>
-                <th scope="col">Precio total</th>
-            </tr>
-        </thead>
-        <tbody id="cuerpoTabla">
-            <!-- Aquí se agregarán las filas de la tabla dinámicamente -->
-        </tbody>
-    </table>
+<div class="container">
+    <h2>Carrito de Compras</h2>
+    <div id="tablaProductos" class="table-responsive">
+        <form method="post" action="{% url 'guardar_venta' %}">
+            {% csrf_token %}
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio unitario</th>
+                    <th scope="col">Precio total</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+                <!-- Aquí se agregarán las filas de la tabla dinámicamente -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" align="right"><strong>Total general:</strong></td>
+                    <td id="totalGeneral" colspan="2">$0</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="row bg-light p-3 mb-3">
+        <h3><center>Agregar Productos al Carrito</center></h3>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="txtProductos">Producto:</label>
+                <select id="txtProductos" class="form-control">
+                    <option value="">Selecciona un producto</option>
+                    {% for p in producto %}
+                    <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" class="form-control" min="1" value="1">
+            </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="button" onclick="agregarProducto()" class="btn btn-primary btn-block">Agregar</button>
+        </div>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-success btn-lg">Guardar Venta</button>
+    </div>
 </div>
-<ul class="list-group mb-3">
-    <li class="list-group-item d-flex justify-content-between lh-sm">
-        <label for="txtProductos">Producto:</label>
-        <select id="txtProductos">
-            <option value="">Selecciona un producto</option>
-            {% for p in producto %}
-            <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" min="1" value="1">
-        <button type="button" onclick="agregarProducto()">Agregar</button>
-    </li>
-</ul>
-<button type="button" onclick="guardarVenta()">Guardar Venta</button>
 <script>
+    var totalGeneral = 0;
+
     function agregarProducto() {
         var selectProductos = document.getElementById("txtProductos");
+        if (selectProductos.value === "") {
+            alert("Por favor selecciona un producto.");
+            return;
+        }
+        
         var codigoProducto = selectProductos.value;
         var nombreProducto = selectProductos.options[selectProductos.selectedIndex].text;
         var precioUnitario = parseFloat(selectProductos.options[selectProductos.selectedIndex].getAttribute('data-precio'));
@@ -49,14 +78,46 @@
         var precioUnitarioFormateado = precioUnitario.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
         var precioTotalFormateado = precioTotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
 
-        var fila = "<tr><td>" + nombreProducto + "</td><td>" + cantidad + "</td><td>" + precioUnitarioFormateado + "</td><td>" + precioTotalFormateado + "</td></tr>";
+        var cuerpoTabla = document.getElementById("cuerpoTabla");
+        var filas = cuerpoTabla.getElementsByTagName("tr");
 
-        document.getElementById("cuerpoTabla").innerHTML += fila;
+        // Verificar si el producto ya está en la tabla
+        var productoExistente = false;
+        for (var i = 0; i < filas.length; i++) {
+            var celdas = filas[i].getElementsByTagName("td");
+            if (celdas[0].textContent === nombreProducto) {
+                // Actualizar la cantidad y el precio total
+                var cantidadExistente = parseInt(celdas[1].textContent);
+                var precioTotalExistente = parseInt(celdas[3].textContent.replace("$", "").replace(",", ""));
+                var nuevaCantidad = cantidadExistente + cantidad;
+                var nuevoPrecioTotal = precioTotalExistente + precioTotal;
+                celdas[1].textContent = nuevaCantidad;
+                celdas[3].textContent = "$" + nuevoPrecioTotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
+                productoExistente = true;
+                break;
+            }
+        }
+
+        if (!productoExistente) {
+            // Agregar nueva fila
+            var fila = "<tr><td>" + nombreProducto + "</td><td>" + cantidad + "</td><td>" + precioUnitarioFormateado + "</td><td>" + precioTotalFormateado + "</td><td><button type='button' onclick='eliminarProducto(this)' class='btn btn-danger'>Eliminar</button></td></tr>";
+            cuerpoTabla.innerHTML += fila;
+        }
+
+        // Actualizar el precio total general
+        totalGeneral += precioTotal;
+        document.getElementById("totalGeneral").textContent = totalGeneral.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
     }
+
+    function eliminarProducto(btn) {
+        var fila = btn.parentNode.parentNode;
+        var precioTotal = parseInt(fila.getElementsByTagName("td")[3].textContent.replace("$", "").replace(",", ""));
+        totalGeneral -= precioTotal;
+        document.getElementById("totalGeneral").textContent = "$" + totalGeneral.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 0 });
+        fila.parentNode.removeChild(fila);
+    }
+
+   
+    
 </script>
-
-
-
-
-
 {% endblock %}
