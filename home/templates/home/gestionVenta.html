@@ -1,130 +1,130 @@
 {% extends "./base.html" %}
 
 {% block body %}
+</h4>
 <div class="container">
-  <h2>Carrito de Compras</h2>
-  <div id="tablaProductos" class="table-responsive">
-    {% csrf_token %}
-    <table class="table table-bordered">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Producto</th>
-          <th scope="col">Cantidad</th>
-          <th scope="col">Precio unitario</th>
-          <th scope="col">Precio total</th>
-          <th scope="col">Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="cuerpoTabla">
-        </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="3" align="right"><strong>Total general:</strong></td>
-          <td id="totalGeneral" colspan="2">0</td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <div class="row bg-light p-3 mb-3">
-    <h3><center>Agregar Productos al Carrito</center></h3>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="txtProductos">Producto:</label>
-        <select id="txtProductos" class="form-control">
-          <option value="">Selecciona un producto</option>
-          {% for p in producto %}
-          <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
-          {% endfor %}
-        </select>
-      </div>
+    <h2>Carrito de Compras</h2>
+    <div id="tablaProductos" class="table-responsive">
+        
+            {% csrf_token %}
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Precio unitario</th>
+                    <th scope="col">Precio total</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+                <!-- Aquí se agregarán las filas de la tabla dinámicamente -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" align="right"><strong>Total general:</strong></td>
+                    <td id="totalGeneral" colspan="2">0</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" class="form-control" min="1" value="1">
-      </div>
+    <div class="row bg-light p-3 mb-3">
+        <h3><center>Agregar Productos al Carrito</center></h3>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="txtProductos">Producto:</label>
+                <select id="txtProductos" class="form-control">
+                    <option value="">Selecciona un producto</option>
+                    {% for p in producto %}
+                    <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" class="form-control" min="1" value="1">
+            </div>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="button" onclick="agregarProducto()" class="btn btn-primary btn-block">Agregar</button>
+        </div>
     </div>
-    <div class="col-md-3 d-flex align-items-end">
-      <button type="button" onclick="agregarProducto()" class="btn btn-primary btn-block">Agregar</button>
+    <div class="text-center">
+        
     </div>
-  </div>
-
-  <button type="button" onclick="realizarVenta()" class="btn btn-success">Realizar Venta</button>
-
-  <div class="text-center">
-    
-  </div>
 </div>
 <script>
-  var totalGeneral = 0;
+    var totalGeneral = 0;
 
-  function agregarProducto() {
-    var selectProductos = document.getElementById("txtProductos");
-    if (selectProductos.value === "") {
-      alert("Por favor selecciona un producto.");
-      return;
-    }
+    function agregarProducto() {
+        var selectProductos = document.getElementById("txtProductos");
+        if (selectProductos.value === "") {
+            alert("Por favor selecciona un producto.");
+            return;
+        }
+        
+        var codigoProducto = selectProductos.value;
+        var nombreProducto = selectProductos.options[selectProductos.selectedIndex].text;
+        var precioUnitario = parseFloat(selectProductos.options[selectProductos.selectedIndex].getAttribute('data-precio'));
+        var cantidad = parseInt(document.getElementById("cantidad").value);
+        var precioTotal = precioUnitario * cantidad;
 
-    var codigoProducto = selectProductos.value;
-    var nombreProducto = selectProductos.options[selectProductos.selectedIndex].text;
-    var precioUnitario = parseFloat(selectProductos.options[selectProductos.selectedIndex].getAttribute('data-precio'));
-    var cantidad = parseInt(document.getElementById("cantidad").value);
-    var precioTotal = precioUnitario * cantidad;
+        // Redondear el precio total a dos decimales
+        precioTotal = Math.round(precioTotal);
 
-    // Redondear el precio total a dos decimales
-    precioTotal = Math.round(precioTotal * 100) / 100;
+        // No es necesario formatear los precios con el signo de pesos
+        var precioUnitarioFormateado = precioUnitario.toFixed(0); // Ajustar a dos decimales
+        var precioTotalFormateado = precioTotal.toFixed(0); // Ajustar a dos decimales
 
-    // Formatear los precios con dos decimales
-    var precioUnitarioFormateado = precioUnitario.toFixed(2);
-    var precioTotalFormateado = precioTotal.toFixed(2);
+        var cuerpoTabla = document.getElementById("cuerpoTabla");
+        var filas = cuerpoTabla.getElementsByTagName("tr");
 
-    var cuerpoTabla = document.getElementById("cuerpoTabla");
-    var filas = cuerpoTabla.getElementsByTagName("tr");
+        // Verificar si el producto ya está en la tabla
+        var productoExistente = false;
+        for (var i = 0; i < filas.length; i++) {
+            var celdas = filas[i].getElementsByTagName("td");
+            if (celdas[0].textContent === nombreProducto) {
+                // Actualizar la cantidad y el precio total
+                var cantidadExistente = parseInt(celdas[1].textContent);
+                var precioTotalExistente = parseFloat(celdas[3].textContent);
+                var nuevaCantidad = cantidadExistente + cantidad;
+                var nuevoPrecioTotal = precioTotalExistente + precioTotal;
+                celdas[1].textContent = nuevaCantidad;
+                celdas[3].textContent = nuevoPrecioTotal.toFixed(0); // Ajustar a dos decimales
+                productoExistente = true;
+                break;
+            }
+        }
 
-    // Verificar si el producto ya está en la tabla
-    var productoExistente = false;
-    for (var i = 0; i < filas.length; i++) {
-      var celdas = filas[i].getElementsByTagName("td");
-      if (celdas[0].textContent === nombreProducto) {
-        // Actualizar la cantidad y el precio total
-        var cantidadExistente = parseInt(celdas[1].textContent);
-        var precioTotalExistente = parseFloat(celdas[3].textContent);
-        var nuevaCantidad = cantidadExistente + cantidad;
-        var nuevoPrecioTotal = precioTotalExistente + precioTotal;
-        celdas[1].textContent = nuevaCantidad;
-        celdas[3].textContent = nuevoPrecioTotal.toFixed(2);
-        productoExistente = true;
-        break;
-      }
-    }
-
-    if (!productoExistente) {
-      // Agregar nueva fila
-      var fila = "<tr><td>" + nombreProducto + "</td><td>" + cantidad + "</td><td>" + precioUnitarioFormateado + "</td><td>" + precioTotalFormat
-
+        if (!productoExistente) {
+            // Agregar nueva fila
+            var fila = "<tr><td>" + nombreProducto + "</td><td>" + cantidad + "</td><td>" + precioUnitarioFormateado + "</td><td>" + precioTotalFormateado + "</td><td><button type='button' onclick='eliminarProducto(this)' class='btn btn-danger'>Eliminar</button></td></tr>";
             
-     
-        "</td><td><button type='button' onclick='eliminarProducto(this)' class='btn btn-danger'>Eliminar</button></td></tr>";
+            
+            
+            cuerpoTabla.innerHTML += fila;
+        }
 
-        cuerpoTabla.innerHTML += fila;
-      }
-  
-      // Actualizar el precio total general
-      totalGeneral += precioTotal;
-      document.getElementById("totalGeneral").textContent = totalGeneral.toFixed(2);
+        // Actualizar el precio total general
+        totalGeneral += precioTotal;
+        document.getElementById("totalGeneral").textContent = totalGeneral.toFixed(0); // Ajustar a dos decimales
     }
-  
+
     function eliminarProducto(btn) {
-      var fila = btn.parentNode.parentNode;
-      var precioTotal = parseFloat(fila.getElementsByTagName("td")[3].textContent);
-      if (!isNaN(precioTotal)) {
-        totalGeneral -= precioTotal;
-        document.getElementById("totalGeneral").textContent = totalGeneral.toFixed(2);
-      }
-      fila.parentNode.removeChild(fila);
+        var fila = btn.parentNode.parentNode;
+        var precioTotal = parseFloat(fila.getElementsByTagName("td")[3].textContent);
+        if (!isNaN(precioTotal)) {
+            totalGeneral -= precioTotal;
+            document.getElementById("totalGeneral").textContent = totalGeneral.toFixed(0); // Ajustar a dos decimales
+        }
+        fila.parentNode.removeChild(fila);
     }
-  
     
-  </script>
-  {% endblock %}
-  
+
+   
+    
+</script>
+{% endblock %}
