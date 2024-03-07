@@ -6,13 +6,14 @@ class Producto(models.Model):
     codigo = models.CharField(primary_key=True, max_length=6)
     nombre = models.CharField(max_length=50)
     precio = models.PositiveSmallIntegerField()
+    stock = models.PositiveSmallIntegerField()
 
     def __str__(self):
         texto = "{0} ({1})"
         return texto.format(self.nombre, self.precio)
 
 class Pqrs(models.Model):
-    codigo = models.CharField(primary_key=True, max_length=6)
+    codigo = models.AutoField(primary_key=True, max_length=6)
     nombre = models.CharField(max_length=50)
     correo = models.CharField(max_length=50)
     tipoPqrs = models.CharField(max_length=50)
@@ -23,22 +24,16 @@ class Pqrs(models.Model):
         return texto.format(self.nombre, self.tipoPqrs)
 
 class Venta(models.Model):
-    codigo = models.AutoField(primary_key=True, max_length=6)
-    productos = models.ManyToManyField(Producto) 
-    totalVenta = models.CharField(max_length=51)
-
-    def calcular_total_venta(self):
-        total = 0
-        for producto in self.productos.all():
-            total += producto.precio
-        self.totalVenta = total
-        self.save()
+    codigo = models.AutoField(primary_key=True)
+    total_venta = models.DecimalField(max_digits=10, decimal_places=2)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
-        self.calcular_total_venta()
-        super().save(*args, **kwargs)
     
+        self.total_venta = self.producto.precio
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        texto = "{0} ({1})"
-        return texto.format(self.nomProducto, self.totalVenta)
+        return f"Venta #{self.codigo} - Total: {self.total_venta}"
+
 
