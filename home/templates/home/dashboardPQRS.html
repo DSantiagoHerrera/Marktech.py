@@ -1,0 +1,54 @@
+{% extends "./base_admin.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="mb-4">Dashboard del Administrador</h1>
+
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">PQRS Registradas</h2>
+        
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Codigo</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Telefono</th>
+              <th scope="col">Tipo de PQRS</th>
+              <th scope="col">Mensaje</th>
+              <th scope="col">Respuesta</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pqrs in pqrs_list %}
+              <tr>
+                <td>{{ pqrs.codigo }}</td>
+                <td>{{ pqrs.nombre }}</td>
+                <td>{{ pqrs.correo }}</td>
+                <td>{{ pqrs.telefono }}</td>
+                <td>{{ pqrs.tipoPqrs }}</td>
+                <td>{{ pqrs.mensaje }}</td>
+                <td>{{ pqrs.respuesta }}</td>
+                <td>
+                  <form action="/admin/responderPqrs/{{ pqrs.codigo }}/" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <textarea id="txtrespuesta" name="txtrespuesta" class="form-control" placeholder="Responder..." rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar respuesta</button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="8">No hay PQRS registradas</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
