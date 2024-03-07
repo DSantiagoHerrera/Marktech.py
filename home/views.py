@@ -22,11 +22,12 @@ def lista_pqrs(request):
 def registrarPqrs(request):
     nombre=request.POST['txtnombre']
     correo=request.POST['txtcorreo']
+    telefono=request.POST['txttelefono']
     tipoPqrs=request.POST['txttipoPqrs']
     mensaje=request.POST['txtmensaje']
     
     pqrs=Pqrs.objects.create(
-        nombre=nombre, correo=correo, tipoPqrs=tipoPqrs, mensaje=mensaje)
+        nombre=nombre, correo=correo, telefono = telefono ,tipoPqrs=tipoPqrs, mensaje=mensaje)
     return redirect('/home/pqrs')
 
 def eliminarPqrs(request, codigo):
