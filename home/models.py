@@ -18,7 +18,7 @@ class Pqrs(models.Model):
     correo = models.CharField(max_length=50)
     telefono = models.BigIntegerField()
     tipoPqrs = models.CharField(max_length=50)
-    mensaje = models.CharField(max_length=50)
+    mensaje = models.CharField(max_length=1000)
     
     def __str__(self):
         texto = "{0} ({1})"
