@@ -1,4 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
+import smtplib
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import Producto, Pqrs
 
 # Create your views here.
@@ -80,6 +83,38 @@ def eliminarProducto(request, codigo):
 def ventaView(request):
     productosListados = Producto.objects.all()
     return render(request, 'home/gestionVenta.html', {"producto": productosListados})
+
+def dashboardPQRS(request):
+    pqrs_list = Pqrs.objects.all()
+    return render(request, 'home/dashboardPQRS.html', {"pqrs_list": pqrs_list})
+
+
+def enviar_correo_respuesta(correo, asunto, mensaje):
+    try:
+        send_mail(asunto, mensaje, 'panne@gmail.com', [correo])
+        print(f'Correo enviado a {correo} con éxito.')
+    except Exception as e:
+        print(f'Error al enviar el correo: {str(e)}')
+
+
+def responder_pqrs(request, codigo):
+    if request.method == 'POST':
+        pqrs = Pqrs.objects.get(codigo=codigo)
+        respuesta = request.POST.get('txtrespuesta', '')
+        pqrs.respuesta = respuesta
+        pqrs.save()
+
+        asunto = 'Respuesta PQRS'
+        mensaje = f'Tu PQRS ha sido respondido:\n\n{respuesta}'
+
+        try:
+            enviar_correo_respuesta(pqrs.correo, asunto, mensaje)
+            return redirect('dashboardPQRS')
+        except Exception as e:
+            print(f'Error al enviar el correo: {str(e)}')
+
+    return render(request, 'dashboardPQRS.html', {'codigo': codigo})
+
 
 
 
