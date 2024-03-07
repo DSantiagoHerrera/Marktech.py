@@ -16,4 +16,6 @@ urlpatterns = [
     path('', views.inicio, name='home'),
     path('redireccion/', views.redireccion, name ='redireccion'),
     path('venta', views.ventaView, name='venta'),
+    path('edicionStock/<codigo>/', views.edicionStock),
+    path('editarStockProducto/<codigo>/', views.editarStockProducto, name='editar_stock_producto'),
 ]
