@@ -13,7 +13,7 @@ class Producto(models.Model):
         return texto.format(self.nombre, self.precio)
 
 class Pqrs(models.Model):
-    codigo = models.AutoField(primary_key=True, max_length=6)
+    codigo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=50)
     correo = models.CharField(max_length=50)
     telefono = models.BigIntegerField()
