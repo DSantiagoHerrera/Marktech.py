@@ -5,7 +5,7 @@
 <div class="container">
     <h2>Carrito de Compras</h2>
     <div id="tablaProductos" class="table-responsive">
-        <form method="post" action="{% url 'guardar_venta' %}">
+        
             {% csrf_token %}
         <table class="table table-bordered">
             <thead class="thead-dark">
@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="text-center">
-        <button type="submit" class="btn btn-success btn-lg">Guardar Venta</button>
+        
     </div>
 </div>
 <script>
