@@ -8,9 +8,6 @@
             <div class="card">
                 <div class="card-body">
                     <form action="/home/registrarPqrs/" method="POST">{% csrf_token %}
-                        <div class="form-group">
-                            <input type="text" id="txtcodigo" name="txtcodigo" class="form-control" placeholder="Codigo" minlength="1" maxlength="6" required>
-                        </div>
                         <br>
                         <div class="form-group">
                             <input type="text" id="txtnombre" name="txtnombre" class="form-control" placeholder="Nombre" maxlength="50" required>
