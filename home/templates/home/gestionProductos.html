@@ -23,6 +23,11 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="text" id="numStock" name="numStock" class="form-control" placeholder="Stock"
+                     min="3" max="9" value="" required>
+                </div>
+
+                <div class="form-group">
                     <button type="submit" class="btn btn-success btn-block">Guardar</button>
                     
                 </div>
@@ -39,6 +44,7 @@
                         <th>Código</th>
                         <th>Nombre</th>
                         <th>Precio</th>
+                        <th>Stock</th>
                         <th colspan="2">Opciones</th>
                     </tr>
                 </thead>
@@ -48,6 +54,7 @@
                         <td>{{c.codigo}}</td>
                         <td>{{c.nombre}}</td>
                         <td>{{c.precio}}</td>
+                        <td>{{c.stock}}</td>
                         <td><a href="/home/edicionProducto/{{c.codigo}}" class="btn btn-info">Editar</a></td>
                         <td><a href="/home/eliminarProducto/{{c.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
                     </tr>
