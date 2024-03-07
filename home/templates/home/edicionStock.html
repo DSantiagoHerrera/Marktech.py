@@ -1,0 +1,27 @@
+{% extends "./base.html" %}
+
+{% block body %}
+<div class="row justify-content-center mt-4"> 
+    <div class="col-md-6">
+        <h2>Actualizar Stock</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="/home/editarStockProducto/{{producto.codigo}}/" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="txtNombre">Nombre</label>
+                        <input type="text" id="txtNombre" name="txtNombre" value="{{producto.nombre}}" class="form-control" placeholder="Nombre" maxlength="50" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="numStock">Nuevo Stock</label>
+                        <input type="number" id="numStock" name="numStock" class="form-control" placeholder="Nuevo Stock" min="0" max="999999999" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success btn-block text-white">Actualizar Stock</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
