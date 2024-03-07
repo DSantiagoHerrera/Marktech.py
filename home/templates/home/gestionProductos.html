@@ -6,30 +6,26 @@
     <h2>Gestion de Productos</h2>
     <div class="card">
         <div class="card-body">
-            <form action="/home/registrarProducto/"method="POST">{% csrf_token %}
+            <form action="/home/registrarProducto/" method="POST">
+                {% csrf_token %}
                 <div class="form-group">
-                    <input type="text" id="txtCodigo" name="txtCodigo" class="form-control" placeholder="Codigo"
-                     minlength="1" maxlength="6" required>
+                    <input type="text" id="txtCodigo" name="txtCodigo" class="form-control" placeholder="Codigo" minlength="1" maxlength="6" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" placeholder="Nombre"
-                    maxlength="50" required>
+                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" placeholder="Nombre" maxlength="50" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="numPrecio" name="numPrecio" class="form-control" placeholder="Precio"
-                     min="3" max="9" value="" required>
+                    <input type="text" id="numPrecio" name="numPrecio" class="form-control" placeholder="Precio" min="3" max="9" value="" required>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="numStock" name="numStock" class="form-control" placeholder="Stock"
-                     min="3" max="9" value="" required>
+                    <input type="text" id="numStock" name="numStock" class="form-control" placeholder="Stock" min="3" max="9" value="" required>
                 </div>
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-success btn-block">Guardar</button>
-                    
                 </div>
             </form>
         </div>
@@ -45,7 +41,7 @@
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Stock</th>
-                        <th colspan="2">Opciones</th>
+                        <th colspan="3">Opciones</th> <!-- Cambiado de colspan="2" a colspan="3" -->
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +52,9 @@
                         <td>{{c.precio}}</td>
                         <td>{{c.stock}}</td>
                         <td><a href="/home/edicionProducto/{{c.codigo}}" class="btn btn-info">Editar</a></td>
+
                         <td><a href="/home/eliminarProducto/{{c.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
+                        <td><a href="/home/edicionStock/{{c.codigo}}" class="btn btn-primary">Stock</a></td> <!-- Botón para editar stock -->
                     </tr>
                     {% endfor %}
                 </tbody>
