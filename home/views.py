@@ -118,6 +118,21 @@ def responder_pqrs(request, codigo):
 
 
 
+def edicionStock(request, codigo):
+    producto = Producto.objects.get(codigo=codigo)
+    return render(request, "home/edicionStock.html", {"producto": producto})
+
+def editarStockProducto(request, codigo):
+    producto = Producto.objects.get(codigo=codigo)
+    if request.method == 'POST':
+        stock_nuevo = int(request.POST['numStock'])
+        producto.stock += stock_nuevo  # Suma la cantidad nueva al stock existente
+        producto.save()
+        return redirect('/home/productos')
+
+    return render(request, "home/edicionStock.html", {"producto": producto})
+
+
 
 
 
