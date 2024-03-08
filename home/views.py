@@ -92,7 +92,7 @@ def dashboardPQRS(request):
 
 def enviar_correo_respuesta(correo, asunto, mensaje):
     try:
-        send_mail(asunto, mensaje, 'dsherrera918@gmail.com', [correo])
+        send_mail(asunto, mensaje, 'panneecaffe2024@gmail.com', [correo])
         print(f'Correo enviado a {correo} con éxito.')
     except Exception as e:
         print(f'Error al enviar el correo: {str(e)}')
