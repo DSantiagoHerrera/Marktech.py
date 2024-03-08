@@ -99,22 +99,24 @@ def enviar_correo_respuesta(correo, asunto, mensaje):
 
 
 def responder_pqrs(request, codigo):
+    pqrs = Pqrs.objects.get(codigo=codigo)
+
     if request.method == 'POST':
-        pqrs = Pqrs.objects.get(codigo=codigo)
         respuesta = request.POST.get('txtrespuesta', '')
         pqrs.respuesta = respuesta
         pqrs.save()
 
         asunto = 'Respuesta PQRS'
-        mensaje = f'Tu PQRS ha sido respondido:\n\n{respuesta}'
+        mensaje_respuesta = f'Tu PQRS ha sido respondido: {respuesta}'
+        mensaje_original = f'Tu PQRS: {pqrs.mensaje}'
 
         try:
-            enviar_correo_respuesta(pqrs.correo, asunto, mensaje)
+            enviar_correo_respuesta(pqrs.correo, asunto, mensaje_original + '\n\n' + mensaje_respuesta)
             return redirect('dashboardPQRS')
         except Exception as e:
             print(f'Error al enviar el correo: {str(e)}')
 
-    return render(request, 'dashboardPQRS.html', {'codigo': codigo})
+    return render(request, 'dashboardPQRS.html', {"pqrs_list": Pqrs.objects.all()})
 
 
 
