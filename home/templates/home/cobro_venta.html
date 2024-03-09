@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "./base.html" %}
+
+{% block body %}
     <title>Cobro de Venta</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            padding: 20px;
-        }
+        
         .cobro-form {
             max-width: 600px;
             margin: auto;
@@ -25,7 +21,7 @@
             margin-bottom: 20px;
         }
     </style>
-</head>
+
 <body>
     <div class="cobro-form">
         <h1 class="text-center">Cobro de Venta</h1>
@@ -88,3 +84,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+{% endblock %}
