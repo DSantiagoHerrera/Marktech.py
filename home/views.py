@@ -135,6 +135,75 @@ def editarStockProducto(request, codigo):
 
     return render(request, "home/edicionStock.html", {"producto": producto})
 
+def guardar_arrays(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        productos = data.get("productos", [])
+        cantidades = data.get("cantidades", [])
+        total_general = data.get("totalGeneral", 0)
+
+        # Crear una instancia de Venta
+        venta = Venta.objects.create(total_venta=total_general)
+
+        # Calcular el total de la venta y actualizar la instancia de Venta
+        total_venta = 0
+        for producto_id, cantidad in zip(productos, cantidades):
+            producto = Producto.objects.get(codigo=producto_id)
+            total_venta += producto.precio * cantidad
+            # Crear una instancia de VentaProducto y asociarla a la venta
+            venta_producto = VentaProducto.objects.create(
+                venta=venta,
+                producto=producto,
+                cantidad=cantidad
+            )
+            # Actualizar el stock del producto
+            producto.stock -= cantidad
+            producto.save()
+
+        venta.total_venta = total_venta
+        venta.save()
+
+        return JsonResponse({"venta_id": venta.pk})
+    else:
+        return JsonResponse({"error": "Método no permitido."}, status=405)
+    
+def ticket_venta(request, venta_id):
+    # Obtener la instancia de la venta
+    venta = get_object_or_404(Venta, pk=venta_id)
+
+    # Obtener los productos asociados a la venta
+    productos_venta = VentaProducto.objects.filter(venta=venta)
+
+    # Pasar la información a la plantilla del ticket
+    context = {
+        'venta': venta,
+        'productos_venta': productos_venta,
+    }
+
+    # Renderizar la plantilla del ticket
+    return render(request, 'home/ticket_venta.html', context)
+
+def cobro_venta(request):
+    if request.method == 'POST':
+        venta_codigo = request.POST.get('venta_codigo')
+        monto_pagado = request.POST.get('monto_pagado')
+
+        venta = get_object_or_404(Venta, codigo=venta_codigo)
+        total_venta = venta.total_venta
+
+        cambio = float(monto_pagado) - total_venta
+
+        return JsonResponse({'cambio': cambio})
+    else:
+        return render(request, 'home/cobro_venta.html')
+    
+def obtener_total_venta(request, venta_codigo):
+    venta = Venta.objects.get(codigo=venta_codigo)
+    total_venta = venta.total_venta
+    return JsonResponse({'total_venta': total_venta})
+
+
+
 
 
 
