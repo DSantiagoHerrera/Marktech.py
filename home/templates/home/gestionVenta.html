@@ -1,130 +1,209 @@
 {% extends "./base.html" %}
 
 {% block body %}
-</h4>
+
+
+
 <div class="container">
+
     <h2>Carrito de Compras</h2>
+
     <div id="tablaProductos" class="table-responsive">
-        
-            {% csrf_token %}
+
+        {% csrf_token %}
+
         <table class="table table-bordered">
+
             <thead class="thead-dark">
+
                 <tr>
-                    
+
                     <th scope="col">Producto</th>
+
                     <th scope="col">Cantidad</th>
+
                     <th scope="col">Precio unitario</th>
+
                     <th scope="col">Precio total</th>
+
                     <th scope="col">Acciones</th>
+
                 </tr>
+
             </thead>
+
             <tbody id="cuerpoTabla">
+
                 <!-- Aquí se agregarán las filas de la tabla dinámicamente -->
+
             </tbody>
+
             <tfoot>
+
                 <tr>
+
                     <td colspan="3" align="right"><strong>Total general:</strong></td>
+
                     <td id="totalGeneral" colspan="2">0</td>
+
                 </tr>
+
             </tfoot>
+
         </table>
+
     </div>
+
     <div class="row bg-light p-3 mb-3">
+
         <h3><center>Agregar Productos al Carrito</center></h3>
+
         <div class="col-md-6">
+
             <div class="form-group">
+
                 <label for="txtProductos">Producto:</label>
+
                 <select id="txtProductos" class="form-control">
+
                     <option value="">Selecciona un producto</option>
+
                     {% for p in producto %}
+
                     <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
+
                     {% endfor %}
+
                 </select>
+
             </div>
+
         </div>
+
         <div class="col-md-3">
+
             <div class="form-group">
+
                 <label for="cantidad">Cantidad:</label>
+
                 <input type="number" id="cantidad" class="form-control" min="1" value="1">
+
             </div>
+
         </div>
+
         <div class="col-md-3 d-flex align-items-end">
+
             <button type="button" onclick="agregarProducto()" class="btn btn-primary btn-block">Agregar</button>
+
         </div>
+
     </div>
+
     <div class="text-center">
-        
+        <button type="button" onclick="guardarArrays()" class="btn btn-warning">Realizar Compra</button>
     </div>
+    
+
 </div>
+
 <script>
+
+    var productos = [];
+
+    var cantidades = [];
+
     var totalGeneral = 0;
 
+
+
     function agregarProducto() {
-        var selectProductos = document.getElementById("txtProductos");
-        if (selectProductos.value === "") {
-            alert("Por favor selecciona un producto.");
-            return;
-        }
-        
-        var codigoProducto = selectProductos.value;
-        var nombreProducto = selectProductos.options[selectProductos.selectedIndex].text;
-        var precioUnitario = parseFloat(selectProductos.options[selectProductos.selectedIndex].getAttribute('data-precio'));
+
+        var productoSeleccionado = document.getElementById("txtProductos");
         var cantidad = parseInt(document.getElementById("cantidad").value);
-        var precioTotal = precioUnitario * cantidad;
+        var precioUnitario = parseFloat(productoSeleccionado.options[productoSeleccionado.selectedIndex].getAttribute("data-precio"));
+        var precioTotal = cantidad * precioUnitario;
 
-        // Redondear el precio total a dos decimales
-        precioTotal = Math.round(precioTotal);
+        // Verificar si el producto ya está en el carrito
+        var indiceExistente = productos.indexOf(productoSeleccionado.value);
+        if (indiceExistente !== -1) {
+            // Si el producto ya está en el carrito, actualizar la cantidad y el precio total
+            cantidades[indiceExistente] += cantidad;
+            var filaExistente = document.getElementById("cuerpoTabla").rows[indiceExistente];
+            filaExistente.cells[1].innerText = cantidades[indiceExistente];
+            var precioTotalExistente = parseFloat(filaExistente.cells[3].innerText);
+            filaExistente.cells[3].innerText = precioTotalExistente + precioTotal;
+        } else {
+            // Si el producto no está en el carrito, agregar una nueva fila a la tabla
+            var fila = "<tr><td>" + productoSeleccionado.options[productoSeleccionado.selectedIndex].text + "</td><td>" + cantidad + "</td><td>" + precioUnitario + "</td><td>" + precioTotal + "</td><td><button class='btn btn-danger' onclick='eliminarProducto(this)'>Eliminar</button></td></tr>";
+            document.getElementById("cuerpoTabla").innerHTML += fila;
 
-        // No es necesario formatear los precios con el signo de pesos
-        var precioUnitarioFormateado = precioUnitario.toFixed(0); // Ajustar a dos decimales
-        var precioTotalFormateado = precioTotal.toFixed(0); // Ajustar a dos decimales
-
-        var cuerpoTabla = document.getElementById("cuerpoTabla");
-        var filas = cuerpoTabla.getElementsByTagName("tr");
-
-        // Verificar si el producto ya está en la tabla
-        var productoExistente = false;
-        for (var i = 0; i < filas.length; i++) {
-            var celdas = filas[i].getElementsByTagName("td");
-            if (celdas[0].textContent === nombreProducto) {
-                // Actualizar la cantidad y el precio total
-                var cantidadExistente = parseInt(celdas[1].textContent);
-                var precioTotalExistente = parseFloat(celdas[3].textContent);
-                var nuevaCantidad = cantidadExistente + cantidad;
-                var nuevoPrecioTotal = precioTotalExistente + precioTotal;
-                celdas[1].textContent = nuevaCantidad;
-                celdas[3].textContent = nuevoPrecioTotal.toFixed(0); // Ajustar a dos decimales
-                productoExistente = true;
-                break;
-            }
+            // Guardar en arrays
+            productos.push(productoSeleccionado.value);
+            cantidades.push(cantidad);
         }
 
-        if (!productoExistente) {
-            // Agregar nueva fila
-            var fila = "<tr><td>" + nombreProducto + "</td><td>" + cantidad + "</td><td>" + precioUnitarioFormateado + "</td><td>" + precioTotalFormateado + "</td><td><button type='button' onclick='eliminarProducto(this)' class='btn btn-danger'>Eliminar</button></td></tr>";
-            
-            
-            
-            cuerpoTabla.innerHTML += fila;
-        }
-
-        // Actualizar el precio total general
+        // Actualizar total general
         totalGeneral += precioTotal;
-        document.getElementById("totalGeneral").textContent = totalGeneral.toFixed(0); // Ajustar a dos decimales
+        document.getElementById("totalGeneral").innerText = totalGeneral;
     }
+
+
 
     function eliminarProducto(btn) {
         var fila = btn.parentNode.parentNode;
-        var precioTotal = parseFloat(fila.getElementsByTagName("td")[3].textContent);
-        if (!isNaN(precioTotal)) {
-            totalGeneral -= precioTotal;
-            document.getElementById("totalGeneral").textContent = totalGeneral.toFixed(0); // Ajustar a dos decimales
-        }
+        var indice = fila.rowIndex - 1; // Obtener el índice de la fila en la tabla
+        var precioTotal = parseFloat(fila.getElementsByTagName("td")[3].innerText);
+        totalGeneral -= precioTotal;
+        document.getElementById("totalGeneral").innerText = totalGeneral;
         fila.parentNode.removeChild(fila);
-    }
-    
 
-   
+        // Eliminar el producto y la cantidad correspondientes de los arrays
+        productos.splice(indice, 1);
+        cantidades.splice(indice, 1);
+    }
+
+    function guardarArrays() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/home/guardar_arrays/", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        
+        // Obtener el token CSRF de la cookie
+        var csrfToken = getCookie("csrftoken");
+        xhr.setRequestHeader("X-CSRFToken", csrfToken);
     
+        // Calcular el total general
+        var totalGeneral = parseFloat(document.getElementById("totalGeneral").innerText);
+    
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var venta_id = JSON.parse(xhr.responseText).venta_id;
+                console.log("Venta registrada con ID:", venta_id);
+                window.location.href = "/home/ticket_venta/" + venta_id + "/";
+            }
+        };
+        xhr.send(JSON.stringify({ productos: productos, cantidades: cantidades, totalGeneral: totalGeneral }));
+    }
+
+    // Función para obtener el valor de una cookie por nombre
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            var cookies = document.cookie.split(";");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
 </script>
+
+
+
+
 {% endblock %}
