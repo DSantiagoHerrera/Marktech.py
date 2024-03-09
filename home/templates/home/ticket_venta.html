@@ -1,0 +1,58 @@
+{% extends "./base.html" %}
+
+{% block body %}
+    <title>Ticket de Venta</title>
+    
+    <style>
+        
+        .ticket {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .ticket h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .ticket p {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .ticket ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .ticket li {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <h1 class="text-center">Ticket de Venta</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>ID de Venta:</strong> {{ venta.codigo }}</p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-md-right"><strong>Total de la Venta: $</strong> {{ venta.total_venta }}</p>
+            </div>
+        </div>
+
+        <h2>Productos Comprados:</h2>
+        <ul>
+            {% for venta_producto in productos_venta %}
+            <li>{{ venta_producto.producto.nombre }} - Cantidad: {{ venta_producto.cantidad }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}

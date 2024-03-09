@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cobro de Venta</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .cobro-form {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .cobro-form h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cobro-form">
+        <h1 class="text-center">Cobro de Venta</h1>
+        <div id="paso1">
+            <div class="form-group">
+                <label for="ventaCodigo">Código de Venta:</label>
+                <input type="text" class="form-control" id="ventaCodigo" placeholder="Ingrese el código de la venta">
+            </div>
+            <button type="button" class="btn btn-primary btn-block" onclick="cargarTotalVenta()">Calcular Total</button>
+        </div>
+
+        <div id="paso2" style="display: none;">
+            <div class="form-group">
+                <label for="totalVenta">Total a Pagar:</label>
+                <input type="text" class="form-control" id="totalVenta" readonly>
+            </div>
+            <div class="form-group">
+                <label for="montoPagado">Monto Pagado:</label>
+                <input type="text" class="form-control" id="montoPagado" placeholder="Ingrese el monto pagado">
+            </div>
+            <div class="form-group">
+                <label for="cambio">Cambio a Devolver:</label>
+                <input type="text" class="form-control" id="cambio" readonly>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" onclick="calcularCambio()">Calcular Cambio</button>
+        </div>
+    </div>
+
+    <script>
+        function cargarTotalVenta() {
+            var ventaCodigo = document.getElementById('ventaCodigo').value;
+            // Realizar la petición AJAX para obtener el total de la venta con el código ingresado
+            // Aquí debes ajustar la URL de acuerdo a tu configuración
+            var url = '/home/obtener_total_venta/' + ventaCodigo + '/';
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalVenta').value = data.total_venta;
+                // Ocultar el paso 1 y mostrar el paso 2
+                document.getElementById('paso1').style.display = 'none';
+                document.getElementById('paso2').style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function calcularCambio() {
+            var totalVenta = parseFloat(document.getElementById('totalVenta').value);
+            var montoPagado = parseFloat(document.getElementById('montoPagado').value);
+            if (!isNaN(totalVenta) && !isNaN(montoPagado)) {
+                var cambio = montoPagado - totalVenta;
+                document.getElementById('cambio').value = cambio;
+            } else {
+                alert('Por favor ingrese un monto válido.');
+            }
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
