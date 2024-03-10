@@ -52,9 +52,7 @@
                         <td>{{c.precio}}</td>
                         <td>{{c.stock}}</td>
                         <td><a href="/home/edicionProducto/{{c.codigo}}" class="btn btn-info">Editar</a></td>
-
-                        <td><a href="/home/eliminarProducto/{{c.codigo}}" class="btn btn-danger btnEliminacion">Eliminar</a></td>
-                        <td><a href="/home/edicionStock/{{c.codigo}}" class="btn btn-primary">Stock</a></td> <!-- Botón para editar stock -->
+                        <td><a href="/home/edicionStock/{{c.codigo}}" class="btn btn-primary">Stock</a></td> 
                     </tr>
                     {% endfor %}
                 </tbody>
