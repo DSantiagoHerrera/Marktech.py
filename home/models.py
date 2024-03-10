@@ -8,6 +8,11 @@ class Producto(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.precio})"
+    
+class Stock(models.Model):
+    producto_codigo = models.CharField(max_length=50)
+    cantidad = models.PositiveIntegerField()
+    fecha = models.DateTimeField(auto_now_add=True)
 
 class Pqrs(models.Model):
     codigo = models.AutoField(primary_key=True)
@@ -24,6 +29,7 @@ class Venta(models.Model):
     codigo = models.AutoField(primary_key=True)
     total_venta = models.DecimalField(max_digits=10, decimal_places=0)
     productos = models.ManyToManyField(Producto, through='VentaProducto')
+    fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Venta #{self.codigo} - Total: {self.total_venta}"
