@@ -203,6 +203,19 @@ def obtener_total_venta(request, venta_codigo):
     return JsonResponse({'total_venta': total_venta})
 
 
+def editarStockProducto(request, codigo):
+    producto = Producto.objects.get(codigo=codigo)
+    if request.method == 'POST':
+        stock_nuevo = int(request.POST['numStock'])
+        producto.stock += stock_nuevo  # Suma la cantidad nueva al stock existente
+        producto.save()
+        
+        # Crear una instancia de Stock
+        Stock.objects.create(producto_codigo=producto.codigo, cantidad=stock_nuevo)
+
+        return redirect('/home/productos')
+
+    return render(request, "home/edicionStock.html", {"producto": producto})
 
 
 
