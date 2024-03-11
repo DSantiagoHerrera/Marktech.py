@@ -20,6 +20,6 @@ urlpatterns = [
     path('editarStockProducto/<codigo>/', views.editarStockProducto, name='editar_stock_producto'),
     path('guardar_arrays/', views.guardar_arrays, name='guardar_arrays'),
     path('ticket_venta/<int:venta_id>/', views.ticket_venta, name='ticket_venta'),
-    path('cobro_venta/', views.cobro_venta, name='cobro_venta'),
+    path('cobro_venta/<int:venta_id>/', views.cobro_venta, name='cobro_venta'),
     path('obtener_total_venta/<int:venta_codigo>/', views.obtener_total_venta, name='obtener_total_venta'),
 ]
