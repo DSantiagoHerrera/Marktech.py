@@ -2,8 +2,6 @@
 
 {% block body %}
 
-
-
 <div class="container">
 
     <h2>Carrito de Compras</h2>
@@ -101,9 +99,12 @@
     </div>
 
     <div class="text-center">
-        <button type="button" onclick="guardarArrays()" class="btn btn-warning">Realizar Compra</button>
+        <button type="button" onclick="realizarCompra()" class="btn btn-warning">Realizar Compra</button>
     </div>
-    
+
+    <div id="mensajeError" class="alert alert-danger mt-3" style="display: none;">
+        Por favor agregue productos al carrito.
+    </div>
 
 </div>
 
@@ -115,10 +116,7 @@
 
     var totalGeneral = 0;
 
-
-
     function agregarProducto() {
-
         var productoSeleccionado = document.getElementById("txtProductos");
         var cantidad = parseInt(document.getElementById("cantidad").value);
         var precioUnitario = parseFloat(productoSeleccionado.options[productoSeleccionado.selectedIndex].getAttribute("data-precio"));
@@ -146,9 +144,10 @@
         // Actualizar total general
         totalGeneral += precioTotal;
         document.getElementById("totalGeneral").innerText = totalGeneral;
+
+        // Ocultar el mensaje de error
+        document.getElementById("mensajeError").style.display = "none";
     }
-
-
 
     function eliminarProducto(btn) {
         var fila = btn.parentNode.parentNode;
@@ -163,18 +162,25 @@
         cantidades.splice(indice, 1);
     }
 
-    function guardarArrays() {
+    function realizarCompra() {
+        // Verificar si hay productos en el carrito
+        if (productos.length === 0) {
+            document.getElementById("mensajeError").style.display = "block";
+            return; // Detener la función si no hay productos en el carrito
+        }
+
+        // Si hay productos en el carrito, continuar con la compra
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/home/guardar_arrays/", true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        
+
         // Obtener el token CSRF de la cookie
         var csrfToken = getCookie("csrftoken");
         xhr.setRequestHeader("X-CSRFToken", csrfToken);
-    
+
         // Calcular el total general
         var totalGeneral = parseFloat(document.getElementById("totalGeneral").innerText);
-    
+
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var venta_id = JSON.parse(xhr.responseText).venta_id;
@@ -203,7 +209,5 @@
 
 </script>
 
-
-
-
 {% endblock %}
+
