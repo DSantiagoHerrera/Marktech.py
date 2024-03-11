@@ -4,7 +4,6 @@
     <title>Ticket de Venta</title>
     
     <style>
-        
         .ticket {
             max-width: 600px;
             margin: auto;
@@ -29,6 +28,20 @@
             font-size: 16px;
             margin-bottom: 10px;
         }
+        #descargarPDF {
+            display: block; /* Asegurarse de que el botón sea visible normalmente */
+        }
+        #cobrarVenta {
+            display: block; /* Asegurarse de que el botón sea visible normalmente */
+        }
+        @media print {
+            #descargarPDF {
+                display: none; /* Ocultar el botón cuando se imprime */
+            }
+            #cobrarVenta {
+                display: none; /* Ocultar el botón cuando se imprime */
+            }
+        }
     </style>
 </head>
 <body>
@@ -49,10 +62,24 @@
             <li>{{ venta_producto.producto.nombre }} - Cantidad: {{ venta_producto.cantidad }}</li>
             {% endfor %}
         </ul>
+        <div class="d-flex justify-content-between">
+            <button id="descargarPDF" class="btn btn-primary">Descargar PDF</button>
+            <a href="/home/cobro_venta/{{ venta.pk }}" id="cobrarVenta" class="btn btn-success">Cobrar</a>
+        </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('descargarPDF').addEventListener('click', function () {
+            // Agregar la clase downloading-pdf al body al hacer clic en el botón de descarga de PDF
+            document.body.classList.add('downloading-pdf');
+            // Imprimir el documento
+            window.print();
+            // Eliminar la clase downloading-pdf después de que se complete la impresión
+            setTimeout(function () {
+                document.body.classList.remove('downloading-pdf');
+            }, 1000); // Espera 1 segundo después de la impresión
+        });
+    </script>
 </body>
 </html>
 {% endblock %}
