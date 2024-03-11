@@ -1,8 +1,10 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 import smtplib
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import Producto, Pqrs
+from .models import *
+from django.http import JsonResponse
+import json
 
 # Create your views here.
 def inicio(request):
@@ -183,19 +185,30 @@ def ticket_venta(request, venta_id):
     # Renderizar la plantilla del ticket
     return render(request, 'home/ticket_venta.html', context)
 
-def cobro_venta(request):
+def cobro_venta(request, venta_id):
+    # Obtener la venta asociada al ID proporcionado
+    venta = get_object_or_404(Venta, pk=venta_id)
+
     if request.method == 'POST':
+        # Obtener los datos del formulario de cobro
         venta_codigo = request.POST.get('venta_codigo')
         monto_pagado = request.POST.get('monto_pagado')
 
-        venta = get_object_or_404(Venta, codigo=venta_codigo)
+        # Realizar el cálculo del cambio
         total_venta = venta.total_venta
-
         cambio = float(monto_pagado) - total_venta
 
+        # Aquí puedes agregar lógica adicional, como registrar el pago en la base de datos, enviar un correo electrónico de confirmación, etc.
+
+        # Devolver la respuesta como JSON
         return JsonResponse({'cambio': cambio})
+
     else:
-        return render(request, 'home/cobro_venta.html')
+        # Renderizar la página de cobro con la información de la venta
+        context = {
+            'venta': venta
+        }
+        return render(request, 'home/cobro_venta.html', context)
     
 def obtener_total_venta(request, venta_codigo):
     venta = Venta.objects.get(codigo=venta_codigo)
