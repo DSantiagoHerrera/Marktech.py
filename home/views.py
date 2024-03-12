@@ -100,8 +100,9 @@ def enviar_correo_respuesta(correo, asunto, mensaje):
         print(f'Error al enviar el correo: {str(e)}')
 
 
-def responder_pqrs(request, codigo):
+def responder_pqrs(request, codigo,):
     pqrs = Pqrs.objects.get(codigo=codigo)
+    
 
     if request.method == 'POST':
         respuesta = request.POST.get('txtrespuesta', '')
@@ -109,8 +110,8 @@ def responder_pqrs(request, codigo):
         pqrs.save()
 
         asunto = 'Respuesta PQRS'
-        mensaje_respuesta = f'Tu PQRS ha sido respondido: {respuesta}'
-        mensaje_original = f'Tu PQRS: {pqrs.mensaje}'
+        mensaje_respuesta = f'Tu PQRS ha sido respondido: \n{respuesta}'
+        mensaje_original = f'Tu PQRS registrada\nFecha: {pqrs.fecha}\nMensaje: {pqrs.mensaje}'
 
         try:
             enviar_correo_respuesta(pqrs.correo, asunto, mensaje_original + '\n\n' + mensaje_respuesta)
