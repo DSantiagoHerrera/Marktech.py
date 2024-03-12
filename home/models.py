@@ -35,6 +35,12 @@ class Venta(models.Model):
     def __str__(self):
         return f"Venta #{self.codigo} - Total: {self.total_venta}"
 
+class DetalleVenta(models.Model):
+    id = models.AutoField(primary_key=True)
+    cantidad = models.IntegerField()
+    producto_id = models.IntegerField()
+    venta_id = models.IntegerField()
+
 class VentaProducto(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
