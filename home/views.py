@@ -12,10 +12,6 @@ def inicio(request):
 
 def redireccion (request):
     return render (request, 'redireccion.html')
-    
-def pqrsView(request):
-    pqrslistados = Pqrs.objects.all()
-    return render (request, 'home/pqrs.html', {"pqrs": pqrslistados})
 
 def lista_venta(request):
     ventas = Venta.objects.all() 
@@ -87,6 +83,30 @@ def ventaView(request):
     productosListados = Producto.objects.all()
     return render(request, 'home/gestionVenta.html', {"producto": productosListados})
 
+#PQRS ---------------------------------------------------------------------------------------------------------------------
+
+def pqrsView(request):
+    pqrslistados = Pqrs.objects.all()
+    return render (request, 'home/pqrs.html', {"pqrs": pqrslistados}) 
+
+
+def registrarPqrs(request):
+    nombre=request.POST['txtnombre']
+    correo=request.POST['txtcorreo']
+    telefono=request.POST['txttelefono']
+    tipoPqrs=request.POST['txttipoPqrs']
+    mensaje=request.POST['txtmensaje']
+    
+    pqrs=Pqrs.objects.create(
+        nombre=nombre, correo=correo, telefono = telefono ,tipoPqrs=tipoPqrs, mensaje=mensaje)
+    return redirect('/home/pqrs')
+
+def eliminarPqrs(request, codigo):
+     pqrs=Pqrs.objects.get(codigo=codigo)
+     pqrs.delete()
+     
+     return redirect('/home/lista_pqrs')
+
 def dashboardPQRS(request):
     pqrs_list = Pqrs.objects.all()
     return render(request, 'home/dashboardPQRS.html', {"pqrs_list": pqrs_list})
@@ -122,7 +142,7 @@ def responder_pqrs(request, codigo,):
     return render(request, 'dashboardPQRS.html', {"pqrs_list": Pqrs.objects.all()})
 
 
-
+#STOCK ---------------------------------------------------------------------------------------------------------------------
 
 def edicionStock(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
