@@ -17,6 +17,7 @@ urlpatterns = [
     path('', views.inicio, name='home'),
     path('redireccion/', views.redireccion, name ='redireccion'),
     path('venta/', views.ventaView, name='venta'),
+    path('lista_stock/', views.lista_stock, name='lista_stock'),
     path('edicionStock/<codigo>/', views.edicionStock),
     path('editarStockProducto/<codigo>/', views.editarStockProducto, name='editar_stock_producto'),
     path('guardar_arrays/', views.guardar_arrays, name='guardar_arrays'),
