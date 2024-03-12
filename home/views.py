@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 import smtplib
 from django.core.mail import send_mail
@@ -48,14 +49,27 @@ def productosView(request):
     return render (request, 'home/gestionProductos.html', {"productos": productoslistados})
 
 def registrarProducto(request):
-    codigo=request.POST['txtCodigo']
-    nombre=request.POST['txtNombre']
-    precio=request.POST['numPrecio']
-    stock=request.POST['numStock']
+    if request.method == "POST":
+        codigo = request.POST['txtCodigo']
+        nombre = request.POST['txtNombre']
+        precio = request.POST['numPrecio']
+        stock = request.POST['numStock']
 
-    producto=Producto.objects.create(
-        codigo=codigo, nombre=nombre, precio=precio, stock=stock)
-    return redirect('/home/productos')
+        # Verificar si el código del producto ya existe en la base de datos
+        if Producto.objects.filter(codigo=codigo).exists():
+            messages.error(request, 'El código ingresado ya existe en la base de datos.')
+            return redirect('/home/productos')
+
+        # Verificar si el nombre del producto ya existe en la base de datos
+        if Producto.objects.filter(nombre__iexact=nombre).exists():
+            messages.error(request, 'Este producto ya existe en la base de datos. Edita el precio o el stock en la tabla.')
+            return redirect('/home/productos')
+
+        # Si el producto no existe, guardarlo en la base de datos
+        Producto.objects.create(codigo=codigo, nombre=nombre, precio=precio, stock=stock)
+        return redirect('/home/productos')
+
+    return render(request, 'home/productos')
 
 def edicionProducto(request, codigo):
     producto= Producto.objects.get(codigo=codigo)
