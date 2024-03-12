@@ -66,8 +66,10 @@
 
                     <option value="">Selecciona un producto</option>
 
-                    {% for producto in producto %}
-                    <option value="{{ producto.codigo }}">{{ producto.nombre }}| Precio: {{ producto.precio }}| Stock: {{ producto.stock }}</option>
+                    {% for p in producto %}
+
+                    <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
+
                     {% endfor %}
 
                 </select>
