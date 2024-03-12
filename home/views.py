@@ -25,23 +25,6 @@ def detalles_venta(request, venta_id):
     detalles_venta = VentaProducto.objects.filter(venta=venta)
 
     return render(request, 'detalles_venta.html', {'venta': venta, 'detalles_venta': detalles_venta})
-
-def registrarPqrs(request):
-    nombre=request.POST['txtnombre']
-    correo=request.POST['txtcorreo']
-    telefono=request.POST['txttelefono']
-    tipoPqrs=request.POST['txttipoPqrs']
-    mensaje=request.POST['txtmensaje']
-    
-    pqrs=Pqrs.objects.create(
-        nombre=nombre, correo=correo, telefono = telefono ,tipoPqrs=tipoPqrs, mensaje=mensaje)
-    return redirect('/home/pqrs')
-
-def eliminarPqrs(request, codigo):
-     pqrs=Pqrs.objects.get(codigo=codigo)
-     pqrs.delete()
-     
-     return redirect('/home/lista_pqrs')
     
 
 def productosView(request):
@@ -121,7 +104,7 @@ def registrarPqrs(request):
     
     pqrs=Pqrs.objects.create(
         nombre=nombre, correo=correo, telefono = telefono ,tipoPqrs=tipoPqrs, mensaje=mensaje)
-    return redirect('/home/pqrs')
+    return redirect('/home')
 
 def eliminarPqrs(request, codigo):
      pqrs=Pqrs.objects.get(codigo=codigo)
