@@ -17,6 +17,14 @@ def lista_venta(request):
     ventas = Venta.objects.all() 
     return render(request, 'lista_venta.html', {'ventas': ventas})
 
+def detalles_venta(request, venta_id):
+ 
+    venta = get_object_or_404(Venta, pk=venta_id)
+    
+    detalles_venta = VentaProducto.objects.filter(venta=venta)
+
+    return render(request, 'detalles_venta.html', {'venta': venta, 'detalles_venta': detalles_venta})
+
 def registrarPqrs(request):
     nombre=request.POST['txtnombre']
     correo=request.POST['txtcorreo']
