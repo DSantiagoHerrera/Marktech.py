@@ -21,6 +21,7 @@ class Pqrs(models.Model):
     telefono = models.BigIntegerField()
     tipoPqrs = models.CharField(max_length=50)
     mensaje = models.CharField(max_length=1000)
+    fecha = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"{self.nombre} ({self.tipoPqrs})"
