@@ -1,0 +1,24 @@
+{% extends "./home/base.html" %}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalles de Venta</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Detalles de la Venta</h1>
+        <p><strong>Código de Venta:</strong> {{ venta.codigo }}</p>
+        <p><strong>Total Venta:</strong> {{ venta.total_venta }}</p>
+        <p><strong>Fecha:</strong> {{ venta.fecha }}</p>
+        <h2 class="mb-3">Productos Vendidos:</h2>
+        <ul>
+            {% for detalle in detalles_venta %}
+            <li>{{ detalle.producto.nombre }} - Cantidad: {{ detalle.cantidad }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+{% endblock %}
