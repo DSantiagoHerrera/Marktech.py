@@ -120,6 +120,13 @@
     function agregarProducto() {
         var productoSeleccionado = document.getElementById("txtProductos");
         var cantidad = parseInt(document.getElementById("cantidad").value);
+        var stockDisponible = parseInt(productoSeleccionado.options[productoSeleccionado.selectedIndex].text.split('|')[2].trim().split(':')[1].trim());
+    
+        if (cantidad > stockDisponible) {
+            alert("Cantidad ingresada, superior a la cantidad en Stock");
+            return; // Detener la ejecución si la cantidad es superior al stock disponible
+        }
+    
         var nombreProducto = productoSeleccionado.options[productoSeleccionado.selectedIndex].text.split('|')[0].trim();
         var precioUnitario = parseFloat(productoSeleccionado.options[productoSeleccionado.selectedIndex].getAttribute("data-precio"));
         var precioTotal = cantidad * precioUnitario;
@@ -150,6 +157,7 @@
         // Ocultar el mensaje de error
         document.getElementById("mensajeError").style.display = "none";
     }
+    
 
     function eliminarProducto(btn) {
         var fila = btn.parentNode.parentNode;
