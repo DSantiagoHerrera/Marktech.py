@@ -25,8 +25,8 @@
                     <td>{{ venta.total_venta }}</td>
                     <td>{{ venta.fecha }}</td>
                     <td>
-                        <a href="#" class="btn btn-primary">Detalles</a>
-                        <!-- Enlace para ver detalles de la venta -->
+                        <a href="{% url 'detalles_venta' venta.codigo %}" class="btn btn-primary">Detalles</a>
+
                     </td>
                 </tr>
                 {% empty %}
