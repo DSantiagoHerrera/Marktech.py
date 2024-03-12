@@ -10,7 +10,7 @@ urlpatterns = [
     path('edicionProducto/<codigo>/', views.edicionProducto),
     path('editarProducto/<codigo>/', views.editarProducto),
     path('eliminarProducto/<codigo>/', views.eliminarProducto),
-    path('lista_pqrs/', views.lista_pqrs, name='lista_pqrs'),
+    path('lista_venta/', views.lista_venta, name='lista_venta'),
     path('dashboardPQRS/', views.dashboardPQRS, name='dashboardPQRS'),
     path('home/responder_pqrs/<int:codigo>/', views.responder_pqrs, name='responder_pqrs'),
     path('', views.inicio, name='home'),
