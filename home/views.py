@@ -148,6 +148,10 @@ def responder_pqrs(request, codigo,):
 
 
 #STOCK ---------------------------------------------------------------------------------------------------------------------
+def lista_stock(request):
+    stock = Stock.objects.all() 
+    productos = Producto.objects.all()
+    return render(request, 'lista_stock.html', {'stock': stock,"productos": productos})
 
 def edicionStock(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
