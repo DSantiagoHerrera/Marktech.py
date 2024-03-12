@@ -1,0 +1,42 @@
+{% extends "./home/base.html" %}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Ventas Registradas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Ventas Registradas</h1>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Total Venta</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Acción</th> 
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td>{{ venta.codigo }}</td>
+                    <td>{{ venta.total_venta }}</td>
+                    <td>{{ venta.fecha }}</td>
+                    <td>
+                        <a href="#" class="btn btn-primary">Detalles</a>
+                        <!-- Enlace para ver detalles de la venta -->
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No hay ventas registradas</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+{% endblock %}
