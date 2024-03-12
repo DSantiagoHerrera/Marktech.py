@@ -68,7 +68,8 @@
 
                     {% for p in producto %}
 
-                    <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }}</option>
+                    <option value="{{ p.codigo }}" data-precio="{{ p.precio }}">{{ p.nombre }} | Precio: {{ p.precio }} | Stock: {{ p.stock }}</option>
+                    
 
                     {% endfor %}
 
@@ -119,9 +120,10 @@
     function agregarProducto() {
         var productoSeleccionado = document.getElementById("txtProductos");
         var cantidad = parseInt(document.getElementById("cantidad").value);
+        var nombreProducto = productoSeleccionado.options[productoSeleccionado.selectedIndex].text.split('|')[0].trim();
         var precioUnitario = parseFloat(productoSeleccionado.options[productoSeleccionado.selectedIndex].getAttribute("data-precio"));
         var precioTotal = cantidad * precioUnitario;
-
+    
         // Verificar si el producto ya está en el carrito
         var indiceExistente = productos.indexOf(productoSeleccionado.value);
         if (indiceExistente !== -1) {
@@ -133,18 +135,18 @@
             filaExistente.cells[3].innerText = precioTotalExistente + precioTotal;
         } else {
             // Si el producto no está en el carrito, agregar una nueva fila a la tabla
-            var fila = "<tr><td>" + productoSeleccionado.options[productoSeleccionado.selectedIndex].text + "</td><td>" + cantidad + "</td><td>" + precioUnitario + "</td><td>" + precioTotal + "</td><td><button class='btn btn-danger' onclick='eliminarProducto(this)'>Eliminar</button></td></tr>";
+            var fila = "<tr><td>" + nombreProducto + "</td><td>" + cantidad + "</td><td>" + precioUnitario + "</td><td>" + precioTotal + "</td><td><button class='btn btn-danger' onclick='eliminarProducto(this)'>Eliminar</button></td></tr>";
             document.getElementById("cuerpoTabla").innerHTML += fila;
-
+    
             // Guardar en arrays
             productos.push(productoSeleccionado.value);
             cantidades.push(cantidad);
         }
-
+    
         // Actualizar total general
         totalGeneral += precioTotal;
         document.getElementById("totalGeneral").innerText = totalGeneral;
-
+    
         // Ocultar el mensaje de error
         document.getElementById("mensajeError").style.display = "none";
     }
