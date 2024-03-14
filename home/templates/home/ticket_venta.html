@@ -38,11 +38,15 @@
         #cobrarVenta {
             display: block; /* Asegurarse de que el botón sea visible normalmente */
         }
+        
         @media print {
             #descargarPDF {
                 display: none; /* Ocultar el botón cuando se imprime */
             }
             #cobrarVenta {
+                display: none; /* Ocultar el botón cuando se imprime */
+            }
+            #Volver{
                 display: none; /* Ocultar el botón cuando se imprime */
             }
         }
