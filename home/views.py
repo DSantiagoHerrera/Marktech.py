@@ -11,8 +11,22 @@ import json
 def inicio(request):
     return render(request, 'inicio.html')
 
-def redireccion (request):
-    return render (request, 'redireccion.html')
+def iniciar_sesion(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        contraseña = request.POST.get('contraseña')
+        user = Usuario.objects.filter(email=email, contraseña=contraseña).first()
+        if user is not None:
+            if user.idRol.id == 1:
+                return redirect('dashAdmin')
+            elif user.idRol.id == 2:
+                return redirect('venta')
+            else:
+                return render(request, 'error_rol_desconocido.html')
+        else:
+            messages.error(request, 'Credenciales inválidas')
+            return redirect('login')  # Redirige de nuevo al formulario de inicio de sesión en caso de credenciales inválidas
+    return render(request, 'login.html')
 
 def lista_venta(request):
     ventas = Venta.objects.all() 
