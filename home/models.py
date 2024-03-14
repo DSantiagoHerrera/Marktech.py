@@ -56,3 +56,15 @@ class roles (models.Model):
     def __str__(self):
         return f"{self.email} {self.contraseña}"
 
+class Usuario (models.Model):
+    
+    id = models.AutoField(primary_key=True, max_length=25)
+    email = models.CharField(max_length=50)
+    contraseña = models.CharField(max_length=50)
+    idRol = models.ForeignKey(roles, on_delete=models.CASCADE)
+    
+    
+    def __str__(self):
+        return f"{self.email} {self.contraseña}"
+
+
