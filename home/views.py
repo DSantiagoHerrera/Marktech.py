@@ -14,13 +14,9 @@ import json
 
 
 # Create your views here.
-
+@logout_required
 def inicio(request):
     return render(request, 'inicio.html')
-
-
-
-
 
 def iniciar_sesion(request):
     if request.method == 'POST':
