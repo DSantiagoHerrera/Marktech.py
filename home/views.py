@@ -14,14 +14,14 @@ import json
 
 
 # Create your views here.
-@logout_required
+
 def inicio(request):
     return render(request, 'inicio.html')
 
 
 
 
-@logout_required
+
 def iniciar_sesion(request):
     if request.method == 'POST':
         email = request.POST.get('email')
