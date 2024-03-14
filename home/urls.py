@@ -24,6 +24,6 @@ urlpatterns = [
     path('cobro_venta/<int:venta_id>/', views.cobro_venta, name='cobro_venta'),
     path('obtener_total_venta/<int:venta_codigo>/', views.obtener_total_venta, name='obtener_total_venta'),
     path('dashAdmin/', views.dashAdmin, name='dashAdmin'),
-    path('dashVende/', views.dashVende, name='dashVende'),
     path('login/', views.iniciar_sesion, name='login'),
+    path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
 ]
