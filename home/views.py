@@ -28,6 +28,12 @@ def iniciar_sesion(request):
             return redirect('login')  # Redirige de nuevo al formulario de inicio de sesión en caso de credenciales inválidas
     return render(request, 'login.html')
 
+def dashVende (request):
+    return render (request, 'dashboardVendedor.html')
+
+def dashAdmin (request):
+    return render (request, 'dashboardAdmin.html')
+
 def lista_venta(request):
     ventas = Venta.objects.all() 
     return render(request, 'lista_venta.html', {'ventas': ventas})
