@@ -3,14 +3,25 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 import smtplib
 from django.core.mail import send_mail
 from django.conf import settings
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .decorators import *
+from .models import Usuario
+from home.decorators import admin_required
 from .models import *
 from django.http import JsonResponse
 import json
 
+
 # Create your views here.
+@logout_required
 def inicio(request):
     return render(request, 'inicio.html')
 
+
+
+
+@logout_required
 def iniciar_sesion(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -18,26 +29,37 @@ def iniciar_sesion(request):
         user = Usuario.objects.filter(email=email, contraseña=contraseña).first()
         if user is not None:
             if user.idRol.id == 1:
+                request.session['sesion'] = 1
                 return redirect('dashAdmin')
             elif user.idRol.id == 2:
+                request.session['sesion'] = 2
                 return redirect('venta')
             else:
                 return render(request, 'error_rol_desconocido.html')
         else:
             messages.error(request, 'Credenciales inválidas')
-            return redirect('login')  # Redirige de nuevo al formulario de inicio de sesión en caso de credenciales inválidas
+
+    # Si la solicitud no es POST o si las credenciales son inválidas, renderizamos la página de inicio de sesión
     return render(request, 'login.html')
 
-def dashVende (request):
-    return render (request, 'dashboardVendedor.html')
+def cerrar_sesion(request):
+    # Eliminar la variable de sesión "sesion" al cerrar sesión
+    if 'sesion' in request.session:
+        del request.session['sesion']
+    
+    # Agregar cabecera Cache-Control para evitar almacenamiento en caché
+    response = redirect('inicio')
+    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
 
+@admin_required
 def dashAdmin (request):
     return render (request, 'dashboardAdmin.html')
-
+@admin_required
 def lista_venta(request):
     ventas = Venta.objects.all() 
     return render(request, 'lista_venta.html', {'ventas': ventas})
-
+@admin_required
 def detalles_venta(request, venta_id):
  
     venta = get_object_or_404(Venta, pk=venta_id)
@@ -45,12 +67,13 @@ def detalles_venta(request, venta_id):
     detalles_venta = VentaProducto.objects.filter(venta=venta)
 
     return render(request, 'detalles_venta.html', {'venta': venta, 'detalles_venta': detalles_venta})
-    
 
+    
+@admin_required
 def productosView(request):
     productoslistados = Producto.objects.all()
     return render (request, 'home/gestionProductos.html', {"productos": productoslistados})
-
+@admin_required
 def registrarProducto(request):
     if request.method == "POST":
         codigo = request.POST['txtCodigo']
@@ -73,12 +96,12 @@ def registrarProducto(request):
         return redirect('/home/productos')
 
     return render(request, 'home/productos')
-
+@admin_required
 def edicionProducto(request, codigo):
     producto= Producto.objects.get(codigo=codigo)
     return render(request, "home/edicionProducto.html", {"producto": producto})
 
-
+@admin_required
 def editarProducto(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
     if request.method == 'POST':
@@ -94,7 +117,7 @@ def editarProducto(request, codigo):
 
     return render(request, "home/edicionProducto.html", {"producto": producto})
 
-
+@admin_required
 def eliminarProducto(request, codigo):
      producto=Producto.objects.get(codigo=codigo)
      producto.delete()
@@ -103,7 +126,7 @@ def eliminarProducto(request, codigo):
  
 #Venta ---------------------------------------------------------------------------------------------------------------------
 
-
+@vendedor_required
 def ventaView(request):
     productosListados = Producto.objects.all()
     return render(request, 'home/gestionVenta.html', {"producto": productosListados})
@@ -125,13 +148,13 @@ def registrarPqrs(request):
     pqrs=Pqrs.objects.create(
         nombre=nombre, correo=correo, telefono = telefono ,tipoPqrs=tipoPqrs, mensaje=mensaje)
     return redirect('/home')
-
+@admin_required
 def eliminarPqrs(request, codigo):
      pqrs=Pqrs.objects.get(codigo=codigo)
      pqrs.delete()
      
      return redirect('/home/lista_pqrs')
-
+@admin_required
 def dashboardPQRS(request):
     pqrs_list = Pqrs.objects.all()
     return render(request, 'home/dashboardPQRS.html', {"pqrs_list": pqrs_list})
@@ -168,15 +191,16 @@ def responder_pqrs(request, codigo,):
 
 
 #STOCK ---------------------------------------------------------------------------------------------------------------------
+@admin_required
 def lista_stock(request):
     stock = Stock.objects.all() 
     productos = Producto.objects.all()
     return render(request, 'lista_stock.html', {'stock': stock,"productos": productos})
-
+@admin_required
 def edicionStock(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
     return render(request, "home/edicionStock.html", {"producto": producto})
-
+@admin_required
 def editarStockProducto(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
     if request.method == 'POST':
@@ -186,7 +210,7 @@ def editarStockProducto(request, codigo):
         return redirect('/home/productos')
 
     return render(request, "home/edicionStock.html", {"producto": producto})
-
+@vendedor_required
 def guardar_arrays(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -218,7 +242,7 @@ def guardar_arrays(request):
         return JsonResponse({"venta_id": venta.pk})
     else:
         return JsonResponse({"error": "Método no permitido."}, status=405)
-    
+@vendedor_required    
 def ticket_venta(request, venta_id):
     # Obtener la instancia de la venta
     venta = get_object_or_404(Venta, pk=venta_id)
@@ -234,7 +258,7 @@ def ticket_venta(request, venta_id):
 
     # Renderizar la plantilla del ticket
     return render(request, 'home/ticket_venta.html', context)
-
+@vendedor_required
 def cobro_venta(request, venta_id):
     # Obtener la venta asociada al ID proporcionado
     venta = get_object_or_404(Venta, pk=venta_id)
@@ -259,13 +283,13 @@ def cobro_venta(request, venta_id):
             'venta': venta
         }
         return render(request, 'home/cobro_venta.html', context)
-    
+@vendedor_required    
 def obtener_total_venta(request, venta_codigo):
     venta = Venta.objects.get(codigo=venta_codigo)
     total_venta = venta.total_venta
     return JsonResponse({'total_venta': total_venta})
 
-
+@admin_required
 def editarStockProducto(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
     if request.method == 'POST':
