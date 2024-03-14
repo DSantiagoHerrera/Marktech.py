@@ -43,6 +43,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='roles',
+            fields=[
+                ('id', models.AutoField(max_length=25, primary_key=True, serialize=False)),
+                ('rol', models.CharField(max_length=50)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Stock',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -73,4 +80,15 @@ class Migration(migrations.Migration):
             name='productos',
             field=models.ManyToManyField(through='home.VentaProducto', to='home.producto'),
         ),
+        migrations.CreateModel(
+            name='Usuario',
+            fields=[
+                ('id', models.AutoField(max_length=25, primary_key=True, serialize=False)),
+                ('email', models.CharField(max_length=50)),
+                ('contraseña', models.CharField(max_length=50)),
+                ('idRol', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.roles')),
+            ],
+        ),
+        
+
     ]
