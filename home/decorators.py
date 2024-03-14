@@ -29,5 +29,10 @@ def logout_required(view_func):
         if not request.session.get('sesion'):
             return view_func(request, *args, **kwargs)
         else:
-            return redirect('inicio')
+            # Si la sesión está activa, eliminarla y redirigir al usuario al login
+            del request.session['sesion']
+            response = redirect('login')
+            # Agregar cabecera Cache-Control para evitar almacenamiento en caché
+            response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+            return response
     return wrapper
