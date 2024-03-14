@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Home</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <!-- Bootstrap CSS -->
+    <link href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css' rel='stylesheet'>
+
+    <!-- Tu CSS personalizado -->
+    <style>
+        .btn-custom {
+            background-color: #7B3E19; /* Color café personalizado */
+            color: #fff; /* Color del texto */
+            /* Agrega cualquier otro estilo que desees */
+        }
+        body {
+            background-image: url('https://i.ibb.co/cDK0y5T/736b471f6c02527d4650778556f62acc.jpg'); /* Ruta de tu imagen de fondo */
+            background-size: cover; /* Para cubrir toda el área del fondo */
+            background-repeat: no-repeat; /* Evitar repetir la imagen */
+            background-attachment: fixed; /* Fijar la imagen de fondo mientras se desplaza */
+        }
+
+        .btn-custom {
+            background-color: #7B3E19; /* Color café personalizado */
+            color: #fff; /* Color del texto */
+            /* Agrega cualquier otro estilo que desees */
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="container text-center">
+        <img src="https://i.ibb.co/nDZCcf7/panne.png" alt="Imagen de bienvenida" style="max-width: 500px;">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="row justify-content-center">
+            <div class="col">
+            
+                <img src="https://i.ibb.co/cxM6hvg/png-transparent-shopping-cart-online-shopping-shopping-centre-customer-shopping-cart-angle-orange-sh.png" alt="Imagen de bienvenida" style="max-width: 110px;">
+             <br>
+                <button class="btn btn-custom" onclick="window.location.href = '/home/productos';">Inventario</button>
+            </div>
+            <div class="col">
+                <img src="https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur-orange.png" alt="Imagen de bienvenida" style="max-width: 60px;">
+                <br>
+                <button class="btn btn-custom" onclick="window.location.href = '/home/lista_venta/';">Ventas Realizadas</button>
+            </div>
+            <div class="col">
+                <img src="https://i.ibb.co/n3246rQ/icono-nivel2-pqr-removebg-preview.png" alt="Imagen de bienvenida" style="max-width: 60px;">
+                <br>
+                <button class="btn btn-custom" onclick="window.location.href = '/home/dashboardPQRS';">Responder PQRS</button>
+            </div>
+            <div class="col">
+                <img src="https://cdn-icons-png.flaticon.com/512/5164/5164023.png" alt="Imagen de bienvenida" style="max-width: 60px;">
+                <br>
+                <button class="btn btn-custom" onclick="window.location.href = '/home/lista_stock';">Lista Stock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (opcional, si necesitas funcionalidad de Bootstrap) -->
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+</body>
+</html>
