@@ -48,3 +48,11 @@ class VentaProducto(models.Model):
 
     def __str__(self):
         return f"Venta #{self.venta.codigo}: {self.cantidad} de {self.producto.nombre}"
+
+class roles (models.Model):
+    id = models.AutoField(primary_key=True, max_length=25)
+    rol = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return f"{self.email} {self.contraseña}"
+
