@@ -15,7 +15,6 @@ urlpatterns = [
     path('dashboardPQRS/', views.dashboardPQRS, name='dashboardPQRS'),
     path('home/responder_pqrs/<int:codigo>/', views.responder_pqrs, name='responder_pqrs'),
     path('', views.inicio, name='home'),
-    path('redireccion/', views.redireccion, name ='redireccion'),
     path('venta/', views.ventaView, name='venta'),
     path('lista_stock/', views.lista_stock, name='lista_stock'),
     path('edicionStock/<codigo>/', views.edicionStock),
