@@ -5,6 +5,11 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         
+        .salir {
+            padding-top: 20px;
+            text-align: center;
+        }
+        
         .cobro-form {
             max-width: 600px;
             margin: auto;
@@ -43,6 +48,7 @@
             <button type="button" class="btn btn-primary btn-block" onclick="calcularCambio()">Calcular Cambio</button>
         </div>
     </div>
+    
 
     <script>
         // Esta función obtiene el código de venta de la URL actual
@@ -93,12 +99,16 @@
         
         // Llamar a la función cargarTotalVenta cuando se cargue la página
         window.onload = cargarTotalVenta;
+    
     </script>
     
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div class="salir">
+        <a href="/home/venta/" id="Volver" class="btn btn-warning">Salir</a>
+    </div>
 </body>
 </html>
 {% endblock %}
