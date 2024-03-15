@@ -9,6 +9,33 @@
 <body>
     <div class="container mt-5">
         <h1 class="mb-4">Ventas Registradas</h1>
+
+        <!-- Formulario para filtrar por mes -->
+        <form method="GET" action="{% url 'lista_venta' %}">
+            <div class="form-group row">
+                <label for="mes" class="col-sm-2 col-form-label" style="color: white">Selecciona un mes:</label>
+                <div class="col-sm-4">
+                    <select name="mes" id="mes" class="form-control">
+                        <option value="" {% if not request.GET.mes %} selected {% endif %}>Todos los meses</option>
+                        <option value="1" {% if request.GET.mes == '1' %} selected {% endif %}>Enero</option>
+                        <option value="2" {% if request.GET.mes == '2' %} selected {% endif %}>Febrero</option>
+                        <option value="3" {% if request.GET.mes == '3' %} selected {% endif %}>Marzo</option>
+                        <option value="4" {% if request.GET.mes == '4' %} selected {% endif %}>Abril</option>
+                        <!-- Agrega el resto de los meses según tu necesidad -->
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+                {% if request.GET.mes %}
+                <div class="col-sm-2">
+                    <a href="{% url 'lista_venta' %}" class="btn btn-secondary">Borrar Filtro</a>
+                </div>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- Tabla de ventas -->
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -25,8 +52,7 @@
                     <td>{{ venta.total_venta }}</td>
                     <td>{{ venta.fecha }}</td>
                     <td>
-                        <a href="{% url 'detalles_venta' venta.codigo %}" class="btn btn-primary">Detalles</a>
-
+                        <a href="{% url 'detalles_venta' venta.codigo %}" class="btn btn-primary" style="color: white" >Detalles</a>
                     </td>
                 </tr>
                 {% empty %}
