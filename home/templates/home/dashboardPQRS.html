@@ -33,47 +33,55 @@
                 <td>{{ pqrs.telefono }}</td>
                 <td>{{ pqrs.tipoPqrs }}</td>
                 <td>{{ pqrs.fecha }}</td>
-                <td>{{ pqrs.estado }}</td>
-
-                <td>
-                 
-                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#mensajeModal{{ pqrs.codigo }}">
-                    Ver Mensaje
-                  </button>
+                <td>{{ pqrs.estado }}
+                  {% if pqrs.estado == "Pendiente" %}
+                      <br><img src="https://i.ibb.co/NTwf0fN/icone-de-l-horloge-orange.png" alt="Pendiente" style="width:20px;height:20px;">
+                  {% elif pqrs.estado == "Respondida" %}
+                  <br><img src="https://i.ibb.co/nPKTdP7/Captura-de-pantalla-2024-03-15-070206-removebg-preview.png" alt="Respondida" style="width:20px;height:20px;">
+                  {% endif %}
                 
-                  <div class="modal fade" id="mensajeModal{{ pqrs.codigo }}" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="mensajeModalLabel">Mensaje Completo</h5>
-                        </div>
-                        <div class="modal-body">
-                          {{ pqrs.mensaje }}
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        </div>
+                  
+              </td>
+      
+              <td>
+              
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#mensajeModal{{ pqrs.codigo }}">
+                  Ver Mensaje
+              </button>
+              
+              <div class="modal fade" id="mensajeModal{{ pqrs.codigo }}" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title" id="mensajeModalLabel">Mensaje Completo</h5>
                       </div>
-                    </div>
+                      <div class="modal-body">
+                      {{ pqrs.mensaje }}
+                      </div>
+                      <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                      </div>
                   </div>
-                </td>
-                <td>{{ pqrs.respuesta }}</td>
-                <td>
-                    <form action="{% url 'responder_pqrs' pqrs.codigo %}" method="POST">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <textarea id="txtrespuesta" name="txtrespuesta" class="form-control" placeholder="Responder..." rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Enviar respuesta</button>
-                    </form>                    
-                </td>
-              </tr>
-            {% empty %}
-              <tr>
-                <td colspan="8">No hay PQRS registradas</td>
-              </tr>
-            {% endfor %}
-          </tbody>
+                  </div>
+              </div>
+              </td>
+              <td>{{ pqrs.respuesta }}</td>
+              <td>
+                  <form action="{% url 'responder_pqrs' pqrs.codigo %}" method="POST">
+                      {% csrf_token %}
+                      <div class="form-group">
+                          <textarea id="txtrespuesta" name="txtrespuesta" class="form-control" placeholder="Responder..." rows="3" required></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Enviar respuesta</button>
+                  </form>                    
+              </td>
+          </tr>
+          {% empty %}
+          <tr>
+              <td colspan="8">No hay PQRS registradas</td>
+          </tr>
+          {% endfor %}
+      </tbody>
         </table>
       </div>
     </div>
