@@ -20,6 +20,7 @@
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
               <th scope="col">Mensaje</th>
+              <th scope="col"></th>
               <th scope="col">Respuesta</th>
             </tr>
           </thead>
@@ -62,19 +63,19 @@
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                       </div>
                   </div>
-                  </div>
               </div>
               </td>
               <td>{{ pqrs.respuesta }}</td>
-              <td>
-                  <form action="{% url 'responder_pqrs' pqrs.codigo %}" method="POST">
-                      {% csrf_token %}
-                      <div class="form-group">
-                          <textarea id="txtrespuesta" name="txtrespuesta" class="form-control" placeholder="Responder..." rows="3" required></textarea>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Enviar respuesta</button>
-                  </form>                    
-              </td>
+              <td class="text-left">
+                <form action="{% url 'responder_pqrs' pqrs.codigo %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea id="txtrespuesta" name="txtrespuesta" class="form-control" placeholder="Responder..." rows="3" required></textarea>
+                    </div>
+                    <div style="padding-top: 5px;">
+                      <button type="submit" class="btn btn-primary">Enviar respuesta</button></div>
+                </form>              
+            </td>
           </tr>
           {% empty %}
           <tr>
