@@ -1,19 +1,31 @@
-from django.contrib import messages
-from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-import smtplib
-from django.core.mail import send_mail
-from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .decorators import *
-from .models import Usuario
-from home.decorators import admin_required
-from .models import *
+from .models import Usuario, Venta, Producto, VentaProducto, Pqrs, Stock
 from django.http import JsonResponse
 import json
+from django.utils import timezone
+from datetime import datetime
 
+@admin_required
+def lista_venta(request):
+    mes = request.GET.get('mes')
+    ventas = Venta.objects.all()
 
-# Create your views here.
+    if mes:
+        try:
+            mes_numero = int(mes)
+            # Obtener el primer día del mes
+            fecha_inicio_mes = datetime(timezone.now().year, mes_numero, 1)
+            # Obtener el último día del mes
+            fecha_fin_mes = fecha_inicio_mes.replace(month=mes_numero % 12 + 1, day=1) - timezone.timedelta(days=1)
+            # Filtrar las ventas dentro de este rango de fechas
+            ventas = ventas.filter(fecha__range=[fecha_inicio_mes, fecha_fin_mes])
+        except ValueError:
+            messages.error(request, 'Mes inválido')
+
+    return render(request, 'lista_venta.html', {'ventas': ventas})
+
 @logout_required
 def inicio(request):
     return render(request, 'inicio.html')
@@ -35,40 +47,31 @@ def iniciar_sesion(request):
         else:
             messages.error(request, 'Credenciales inválidas')
 
-    # Si la solicitud no es POST o si las credenciales son inválidas, renderizamos la página de inicio de sesión
     return render(request, 'login.html')
 
 def cerrar_sesion(request):
-    # Eliminar la variable de sesión "sesion" al cerrar sesión
     if 'sesion' in request.session:
         del request.session['sesion']
     
-    # Agregar cabecera Cache-Control para evitar almacenamiento en caché
     response = redirect('inicio')
     response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     return response
 
 @admin_required
-def dashAdmin (request):
-    return render (request, 'dashboardAdmin.html')
-@admin_required
-def lista_venta(request):
-    ventas = Venta.objects.all() 
-    return render(request, 'lista_venta.html', {'ventas': ventas})
+def dashAdmin(request):
+    return render(request, 'dashboardAdmin.html')
+
 @admin_required
 def detalles_venta(request, venta_id):
- 
     venta = get_object_or_404(Venta, pk=venta_id)
-    
     detalles_venta = VentaProducto.objects.filter(venta=venta)
-
     return render(request, 'detalles_venta.html', {'venta': venta, 'detalles_venta': detalles_venta})
 
-    
 @admin_required
 def productosView(request):
     productoslistados = Producto.objects.all()
-    return render (request, 'home/gestionProductos.html', {"productos": productoslistados})
+    return render(request, 'home/gestionProductos.html', {"productos": productoslistados})
+
 @admin_required
 def registrarProducto(request):
     if request.method == "POST":
@@ -77,24 +80,22 @@ def registrarProducto(request):
         precio = request.POST['numPrecio']
         stock = request.POST['numStock']
 
-        # Verificar si el código del producto ya existe en la base de datos
         if Producto.objects.filter(codigo=codigo).exists():
             messages.error(request, 'El código ingresado ya existe en la base de datos.')
             return redirect('/home/productos')
 
-        # Verificar si el nombre del producto ya existe en la base de datos
         if Producto.objects.filter(nombre__iexact=nombre).exists():
             messages.error(request, 'Este producto ya existe en la base de datos. Edita el precio o el stock en la tabla.')
             return redirect('/home/productos')
 
-        # Si el producto no existe, guardarlo en la base de datos
         Producto.objects.create(codigo=codigo, nombre=nombre, precio=precio, stock=stock)
         return redirect('/home/productos')
 
     return render(request, 'home/productos')
+
 @admin_required
 def edicionProducto(request, codigo):
-    producto= Producto.objects.get(codigo=codigo)
+    producto = Producto.objects.get(codigo=codigo)
     return render(request, "home/edicionProducto.html", {"producto": producto})
 
 @admin_required
@@ -104,7 +105,6 @@ def editarProducto(request, codigo):
         nombre = request.POST['txtNombre']
         precio = request.POST['numPrecio']
         
-
         producto.nombre = nombre
         producto.precio = precio
         producto.save()
@@ -117,22 +117,16 @@ def editarProducto(request, codigo):
 def eliminarProducto(request, codigo):
      producto=Producto.objects.get(codigo=codigo)
      producto.delete()
-     
      return redirect('/home/productos')
- 
-#Venta ---------------------------------------------------------------------------------------------------------------------
 
 @vendedor_required
 def ventaView(request):
     productosListados = Producto.objects.all()
     return render(request, 'home/gestionVenta.html', {"producto": productosListados})
 
-#PQRS ---------------------------------------------------------------------------------------------------------------------
-
 def pqrsView(request):
     pqrslistados = Pqrs.objects.all()
-    return render (request, 'home/pqrs.html', {"pqrs": pqrslistados}) 
-
+    return render(request, 'home/pqrs.html', {"pqrs": pqrslistados}) 
 
 def registrarPqrs(request):
     nombre=request.POST['txtnombre']
@@ -144,17 +138,17 @@ def registrarPqrs(request):
     pqrs=Pqrs.objects.create(
         nombre=nombre, correo=correo, telefono = telefono ,tipoPqrs=tipoPqrs, mensaje=mensaje)
     return redirect('/home')
+
 @admin_required
 def eliminarPqrs(request, codigo):
      pqrs=Pqrs.objects.get(codigo=codigo)
      pqrs.delete()
-     
      return redirect('/home/lista_pqrs')
+
 @admin_required
 def dashboardPQRS(request):
     pqrs_list = Pqrs.objects.all()
     return render(request, 'home/dashboardPQRS.html', {"pqrs_list": pqrs_list})
-
 
 def enviar_correo_respuesta(correo, asunto, mensaje):
     try:
@@ -163,14 +157,12 @@ def enviar_correo_respuesta(correo, asunto, mensaje):
     except Exception as e:
         print(f'Error al enviar el correo: {str(e)}')
 
-
-def responder_pqrs(request, codigo):
+def responder_pqrs(request, codigo,):
     pqrs = Pqrs.objects.get(codigo=codigo)
 
     if request.method == 'POST':
         respuesta = request.POST.get('txtrespuesta', '')
         pqrs.respuesta = respuesta
-        pqrs.estado = "Respondida"  # Actualizamos el estado a "Respondida"
         pqrs.save()
 
         asunto = 'Respuesta PQRS'
@@ -183,30 +175,31 @@ def responder_pqrs(request, codigo):
         except Exception as e:
             print(f'Error al enviar el correo: {str(e)}')
 
-    return render(request, 'dashboardPQRS.html', {"pqrs_list": Pqrs.objects.all()})
+    return render(request, 'home/dashboardPQRS.html', {"pqrs_list": Pqrs.objects.all()})
 
-
-
-#STOCK ---------------------------------------------------------------------------------------------------------------------
 @admin_required
 def lista_stock(request):
     stock = Stock.objects.all() 
     productos = Producto.objects.all()
     return render(request, 'lista_stock.html', {'stock': stock,"productos": productos})
+
 @admin_required
 def edicionStock(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
     return render(request, "home/edicionStock.html", {"producto": producto})
+
 @admin_required
 def editarStockProducto(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
     if request.method == 'POST':
         stock_nuevo = int(request.POST['numStock'])
-        producto.stock += stock_nuevo  # Suma la cantidad nueva al stock existente
+        producto.stock += stock_nuevo
         producto.save()
+        Stock.objects.create(producto_codigo=producto.codigo, cantidad=stock_nuevo)
         return redirect('/home/productos')
 
     return render(request, "home/edicionStock.html", {"producto": producto})
+
 @vendedor_required
 def guardar_arrays(request):
     if request.method == "POST":
@@ -215,21 +208,17 @@ def guardar_arrays(request):
         cantidades = data.get("cantidades", [])
         total_general = data.get("totalGeneral", 0)
 
-        # Crear una instancia de Venta
         venta = Venta.objects.create(total_venta=total_general)
 
-        # Calcular el total de la venta y actualizar la instancia de Venta
         total_venta = 0
         for producto_id, cantidad in zip(productos, cantidades):
             producto = Producto.objects.get(codigo=producto_id)
             total_venta += producto.precio * cantidad
-            # Crear una instancia de VentaProducto y asociarla a la venta
             venta_producto = VentaProducto.objects.create(
                 venta=venta,
                 producto=producto,
                 cantidad=cantidad
             )
-            # Actualizar el stock del producto
             producto.stock -= cantidad
             producto.save()
 
@@ -239,47 +228,34 @@ def guardar_arrays(request):
         return JsonResponse({"venta_id": venta.pk})
     else:
         return JsonResponse({"error": "Método no permitido."}, status=405)
+
 @vendedor_required    
 def ticket_venta(request, venta_id):
-    # Obtener la instancia de la venta
     venta = get_object_or_404(Venta, pk=venta_id)
-
-    # Obtener los productos asociados a la venta
     productos_venta = VentaProducto.objects.filter(venta=venta)
-
-    # Pasar la información a la plantilla del ticket
     context = {
         'venta': venta,
         'productos_venta': productos_venta,
     }
-
-    # Renderizar la plantilla del ticket
     return render(request, 'home/ticket_venta.html', context)
+
 @vendedor_required
 def cobro_venta(request, venta_id):
-    # Obtener la venta asociada al ID proporcionado
     venta = get_object_or_404(Venta, pk=venta_id)
 
     if request.method == 'POST':
-        # Obtener los datos del formulario de cobro
         venta_codigo = request.POST.get('venta_codigo')
         monto_pagado = request.POST.get('monto_pagado')
-
-        # Realizar el cálculo del cambio
         total_venta = venta.total_venta
         cambio = float(monto_pagado) - total_venta
-
-        # Aquí puedes agregar lógica adicional, como registrar el pago en la base de datos, enviar un correo electrónico de confirmación, etc.
-
-        # Devolver la respuesta como JSON
         return JsonResponse({'cambio': cambio})
 
     else:
-        # Renderizar la página de cobro con la información de la venta
         context = {
             'venta': venta
         }
         return render(request, 'home/cobro_venta.html', context)
+
 @vendedor_required    
 def obtener_total_venta(request, venta_codigo):
     venta = Venta.objects.get(codigo=venta_codigo)
@@ -291,25 +267,9 @@ def editarStockProducto(request, codigo):
     producto = Producto.objects.get(codigo=codigo)
     if request.method == 'POST':
         stock_nuevo = int(request.POST['numStock'])
-        producto.stock += stock_nuevo  # Suma la cantidad nueva al stock existente
+        producto.stock += stock_nuevo
         producto.save()
-        
-        # Crear una instancia de Stock
         Stock.objects.create(producto_codigo=producto.codigo, cantidad=stock_nuevo)
-
         return redirect('/home/productos')
 
     return render(request, "home/edicionStock.html", {"producto": producto})
-
-
-
-
-
-
-
-
- 
- 
-     
-     
-    
