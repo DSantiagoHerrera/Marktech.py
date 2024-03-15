@@ -1,3 +1,6 @@
+{% extends "./home/base.html" %}
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,6 +8,7 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Home</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    {% block body %}
 
     <!-- Bootstrap CSS -->
     <link href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css' rel='stylesheet'>
@@ -17,8 +21,9 @@
             /* Agrega cualquier otro estilo que desees */
         }
         body {
-            background-image: url('https://i.ibb.co/cDK0y5T/736b471f6c02527d4650778556f62acc.jpg'); /* Ruta de tu imagen de fondo */
+            background-image: url('https://us.123rf.com/450wm/wirestock/wirestock2303/wirestock230325429/199649585-un-primer-plano-de-varios-pasteles-reci%C3%A9n-horneados.jpg?ver=6'); /* Ruta de tu imagen de fondo */
             background-size: cover; /* Para cubrir toda el área del fondo */
+            background-size: 100%;
             background-repeat: no-repeat; /* Evitar repetir la imagen */
             background-attachment: fixed; /* Fijar la imagen de fondo mientras se desplaza */
         }
@@ -28,6 +33,147 @@
             color: #fff; /* Color del texto */
             /* Agrega cualquier otro estilo que desees */
         }
+
+        /* Agrega estos estilos para hacer que el texto sea blanco */
+        body, h2, h3, p, footer {
+            color: white !important;
+        }
+
+        /* Ajusta la barra inferior para que cubra de lado a lado */
+        footer {
+            width: 100%;
+            padding: 10px;
+        }
+
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          /* Encabezado */
+          header {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+          }
+          
+          header h1 {
+            font-size: 2em;
+            margin: 0;
+          }
+          
+          header nav {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+          }
+          
+          header nav a {
+            text-decoration: none;
+            color: #fff;
+            margin: 10px;
+          }
+          
+          header nav a:hover {
+            color: #ddd;
+          }
+          
+          /* Sección de héroe */
+          .hero {
+            background-image: url("images/hero.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            text-align: center;
+            color: #fff;
+          }
+          
+          .hero h2 {
+            font-size: 3em;
+            margin: 100px 0 20px 0;
+          }
+          
+          .hero p {
+            font-size: 1.5em;
+            margin: 0;
+          }
+          
+          /* Sección "Sobre nosotros" */
+          .about {
+            padding: 20px;
+          }
+          
+          .about h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+          }
+          
+          .about p {
+            font-size: 1em;
+            margin-bottom: 10px;
+          }
+          
+          /* Sección de menú */
+          .menu {
+            padding: 20px;
+          }
+          
+          .menu h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+          }
+          
+          .menu ul {
+            list-style: none;
+            padding: 0;
+          }
+          
+          .menu li {
+            display: inline-block;
+            margin: 10px;
+            width: 300px;
+            text-align: center;
+          }
+          
+          .menu li img {
+            width: 200px;
+            height: 150px;
+          }
+          
+          .menu li h3 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+          }
+          
+          .menu li p {
+            font-size: 1em;
+          }
+          
+          /* Sección de contacto */
+          .contact {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+          }
+          
+          .contact p {
+            margin-bottom: 10px;
+          }
+          
+          /* Pie de página */
+          footer {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+          }
+          
+          footer p {
+            margin: 0;
+          }
     </style>
 </head>
 <body>
@@ -38,28 +184,58 @@
     <br>
 
     <div class="container text-center">
-        <img src="https://i.ibb.co/nDZCcf7/panne.png" alt="Imagen de bienvenida" style="max-width: 500px;">
+        <img src="https://i.ibb.co/Nskm4dN/Panne-e-6-removebg-preview.png" alt="Imagen de bienvenida" style="max-width: 800px;">
         <br>
         <br>
         <br>
-        <br>
-        <br>
-        <div class="row justify-content-center">
-            >
-            <div class="col">
-                <img src="https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur-orange.png" alt="Imagen de bienvenida" style="max-width: 60px;">
-                <br>
-                <button class="btn btn-custom" onclick="window.location.href = '/home/login';">Login</button>
-            </div>
-            <div class="col">
-                <img src="https://i.ibb.co/n3246rQ/icono-nivel2-pqr-removebg-preview.png" alt="Imagen de bienvenida" style="max-width: 60px;">
-                <br>
-                <button class="btn btn-custom" onclick="window.location.href = '/home/pqrs';">PQRS</button>
-            </div>
-        </div>
-    </div>
-
+     
     <!-- Bootstrap JS (opcional, si necesitas funcionalidad de Bootstrap) -->
     <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'></script>
+<section class="about">
+      <h3>Tenemos una verdadera pasión por la cocina.</h3>
+      <p>El amor es el ingrediente secreto que hace que todas nuestras comidas sepan mejor y sean mágicas.</p>
+      <p>En Renne Perwian Bistro, utilizamos solo los ingredientes más frescos y auténticos para crear platos que son a la vez deliciosos y visualmente impresionantes.</p>
+      <p>Nuestro menú presenta una amplia variedad de platos tradicionales peruanos, así como algunas creaciones modernas de nuestro chef.</p>
+      <p>Ya sea que esté buscando una comida rápida o una experiencia gastronómica completa, Renne Perwian Bistro es el lugar perfecto para disfrutar de la mejor comida peruana en Bogotá.</p>
+    </section>
+    <section class="menu">
+      <h2>Nuestro Menú</h2>
+      <ul>
+        <li>
+          <img src="https://pbs.twimg.com/media/EhUFx8vXcAIKz6z.jpg:large" alt="Dish 1">
+          <h3>Ceviche de pescado</h3>
+          <p>Pescado fresco marinado en jugo de limón, cebolla roja, cilantro y ají.</p>
+        </li>
+        <li>
+          <img src="https://fotografias.lasexta.com/clipping/cmsimages02/2023/03/14/F2897B8F-D7BB-49B9-AB3B-ED9AFF733E76/este-secreto-elegir-verdad-buen-pan-integral_98.jpg?crop=7360,4141,x0,y380&width=1900&height=1069&optimize=low&format=webply" alt="Dish 2">
+          <h3>Lomo saltado</h3>
+          <p>Filete de res salteado con cebollas, tomates y papas fritas.</p>
+        </li>
+        <li>
+          <img src="https://i.pinimg.com/originals/6c/8b/12/6c8b1219d24ffd501093449328f11d89.jpg" alt="Dish 3">
+          <h3>Ají de gallina</h3>
+          <p>Crema de pollo picante con pan.</p>
+        </li>
+        <li>
+          <img src="https://abmauri.es/wp-content/uploads/2019/06/los-panes-mas-vendidos-delmundo1.jpeg" alt="Dish 4">
+          <h3>Arroz con pollo</h3>
+          <p>Arroz con pollo, verduras y salsa.</p>
+        </li>
+      </ul>
+    </section>
+    <section class="contact">
+      <h2>Contáctenos</h2>
+      <p>Renne Perwian Bistro</p>
+      <p>Carrera 11 # 82-34</p>
+      <p>Bogotá, Colombia</p>
+      <p>(+57) 1 234 5678</p>
+      <p>info@renneperwianbistro.com</p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2023 Renne Perwian Bistro</p>
+  </footer>
 </body>
 </html>
+
+{% endblock %}
