@@ -164,13 +164,13 @@ def enviar_correo_respuesta(correo, asunto, mensaje):
         print(f'Error al enviar el correo: {str(e)}')
 
 
-def responder_pqrs(request, codigo,):
+def responder_pqrs(request, codigo):
     pqrs = Pqrs.objects.get(codigo=codigo)
-    
 
     if request.method == 'POST':
         respuesta = request.POST.get('txtrespuesta', '')
         pqrs.respuesta = respuesta
+        pqrs.estado = "Respondida"  # Actualizamos el estado a "Respondida"
         pqrs.save()
 
         asunto = 'Respuesta PQRS'
@@ -184,6 +184,7 @@ def responder_pqrs(request, codigo,):
             print(f'Error al enviar el correo: {str(e)}')
 
     return render(request, 'dashboardPQRS.html', {"pqrs_list": Pqrs.objects.all()})
+
 
 
 #STOCK ---------------------------------------------------------------------------------------------------------------------
