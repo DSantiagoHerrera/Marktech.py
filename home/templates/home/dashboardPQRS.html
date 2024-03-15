@@ -11,12 +11,14 @@
         <table class="table">
           <thead class="thead-dark">
             <tr>
+              
               <th scope="col">Codigo</th>
               <th scope="col">Nombre</th>
               <th scope="col">Correo</th>
               <th scope="col">Telefono</th>
               <th scope="col">Tipo de PQRS</th>
               <th scope="col">Fecha</th>
+              <th scope="col">Estado</th>
               <th scope="col">Mensaje</th>
               <th scope="col">Respuesta</th>
             </tr>
@@ -24,12 +26,15 @@
           <tbody>
             {% for pqrs in pqrs_list %}
               <tr>
+                
                 <td>{{ pqrs.codigo }}</td>
                 <td>{{ pqrs.nombre }}</td>
                 <td>{{ pqrs.correo }}</td>
                 <td>{{ pqrs.telefono }}</td>
                 <td>{{ pqrs.tipoPqrs }}</td>
                 <td>{{ pqrs.fecha }}</td>
+                <td>{{ pqrs.estado }}</td>
+
                 <td>
                  
                   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#mensajeModal{{ pqrs.codigo }}">
