@@ -26,4 +26,5 @@ urlpatterns = [
     path('dashAdmin/', views.dashAdmin, name='dashAdmin'),
     path('login/', views.iniciar_sesion, name='login'),
     path('cerrar_sesion/', views.cerrar_sesion, name='cerrar_sesion'),
+    path('productos-mas-vendidos/', views.productos_mas_vendidos, name='productos_mas_vendidos'),
 ]
