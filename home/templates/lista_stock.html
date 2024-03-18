@@ -21,18 +21,17 @@
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">ID Producto</th>
+                    <th scope="col">Nombre del Producto</th>
                     <th scope="col">Cantidad</th>
                     <th scope="col">Fecha</th>
                 </tr>
             </thead>
             <tbody>
-                {% for stock in stock %}
-              
+                {% for stock_item in stock %}
                 <tr>
-                    <td>{{ stock.producto_codigo }}</td>
-                    <td>{{ stock.cantidad }}</td>
-                    <td>{{ stock.fecha }}</td>
+                    <td>{{ stock_item.producto_nombre }}</td> <!-- Aquí se muestra el nombre del producto -->
+                    <td>{{ stock_item.cantidad }}</td>
+                    <td>{{ stock_item.fecha }}</td>
                 </tr>
                 {% empty %}
                 <tr>
