@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .decorators import *
 from .models import *
+from django.core.mail import send_mail
 from django.http import JsonResponse
 import json
 from django.utils import timezone
