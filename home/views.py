@@ -1,11 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .decorators import *
-from .models import Usuario, Venta, Producto, VentaProducto, Pqrs, Stock
+from .models import *
 from django.http import JsonResponse
 import json
 from django.utils import timezone
 from datetime import datetime
+
+@admin_required
+def productos_mas_vendidos(request):
+    productos_mas_vendidos = VentaProducto.objects.values('producto__nombre').annotate(total_vendido=models.Sum('cantidad')).order_by('-total_vendido')[:10]
+    
+    # Obtener el precio unitario para cada producto más vendido
+    for producto in productos_mas_vendidos:
+        nombre_producto = producto['producto__nombre']
+        producto_obj = Producto.objects.get(nombre=nombre_producto)
+        producto['precio_unitario'] = producto_obj.precio
+    
+    return render(request, 'home/productos_mas_vendidos.html', {'productos_mas_vendidos': productos_mas_vendidos})
 
 @admin_required
 def lista_venta(request):
@@ -181,7 +193,18 @@ def responder_pqrs(request, codigo,):
 def lista_stock(request):
     stock = Stock.objects.all() 
     productos = Producto.objects.all()
-    return render(request, 'lista_stock.html', {'stock': stock,"productos": productos})
+    stock_con_nombre_producto = []
+
+    # Agregar el nombre del producto a cada entrada de stock
+    for item in stock:
+        producto = productos.filter(codigo=item.producto_codigo).first()
+        stock_con_nombre_producto.append({
+            'producto_nombre': producto.nombre,
+            'cantidad': item.cantidad,
+            'fecha': item.fecha
+        })
+
+    return render(request, 'lista_stock.html', {'stock': stock_con_nombre_producto})
 
 @admin_required
 def edicionStock(request, codigo):
