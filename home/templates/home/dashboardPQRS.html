@@ -2,102 +2,136 @@
 
 {% block body %}
   <div class="container mt-5">
-    <h1 class="mb-4">Dashboard del Administrador</h1>
-    <div class="form-group col-2"> 
-      <input type="text" class="form-control" id="searchInput" placeholder="Buscar...">
+    <h1 class="mb-4 text-center">PQRS Registradas</h1>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="input-group">
+          <input type="text" class="form-control" id="searchInput" placeholder="Buscar...">
+        </div>
+      </div>
+      <div class="col-md-8 d-flex justify-content-end">
+        <div class="btn-group" role="group" aria-label="Filtrar">
+          <button type="button" class="btn btn-outline-secondary brown-outline" id="filterPendientes">Pendientes</button>
+          <button type="button" class="btn btn-outline-secondary brown-outline" id="filterRespondidas">Respondidas</button>
+          <button type="button" class="btn btn-outline-secondary brown-outline" id="limpiarFiltros">Limpiar filtros</button>
+        </div>
+      </div>
     </div>
-    <br>
+    <br> 
 
-    <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">PQRS Registradas</h2>
-        
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">Codigo</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Correo</th>
-              <th scope="col">Telefono</th>
-              <th scope="col">Tipo de PQRS</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Mensaje</th>
-              <th scope="col"></th>
-              <th scope="col">Respuesta</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            {% for pqrs in pqrs_list %}
+    {% for pqrs in pqrs_list %}
+      <div class="card mb-4 pqrs-card" id="pqrs{{ pqrs.codigo }}">
+        <div class="card-body">
+          <table class="table">
+            <tbody>
               <tr>
-                <td>{{ pqrs.codigo }}</td>
-                <td>{{ pqrs.nombre }}</td>
-                <td>{{ pqrs.correo }}</td>
-                <td>{{ pqrs.telefono }}</td>
-                <td>{{ pqrs.tipoPqrs }}</td>
-                <td>{{ pqrs.fecha }}</td>
-                <td>{{ pqrs.estado }}
+                <td><strong>Código:</strong> {{ pqrs.codigo }}</td>
+                <td><strong>Nombre:<br> </strong> {{ pqrs.nombre }}</td>
+                <td><strong>Correo:</strong> {{ pqrs.correo }}</td>
+                <td><strong>Teléfono:</strong> {{ pqrs.telefono }}</td>
+                <td><strong>Tipo de PQRS:</strong> {{ pqrs.tipoPqrs }}</td>
+                <td><strong>Fecha:<br> </strong> {{ pqrs.fecha }}</td>
+                <td><strong>Estado: </strong>
+                  <br>
+                  {{ pqrs.estado }}
                   {% if pqrs.estado == "Pendiente" %}
-                      <br><img src="https://i.ibb.co/NTwf0fN/icone-de-l-horloge-orange.png" alt="Pendiente" style="width:20px;height:20px;">
+                    <img src="https://i.ibb.co/NTwf0fN/icone-de-l-horloge-orange.png" alt="Pendiente" style="width:20px;height:20px;">
                   {% elif pqrs.estado == "Respondida" %}
-                  <br><img src="https://i.ibb.co/nPKTdP7/Captura-de-pantalla-2024-03-15-070206-removebg-preview.png" alt="Respondida" style="width:20px;height:20px;">
+                    <img src="https://i.ibb.co/nPKTdP7/Captura-de-pantalla-2024-03-15-070206-removebg-preview.png" alt="Respondida" style="width:20px;height:20px;">
                   {% endif %}
                 </td>
                 <td>
                   <button type="button" class="btn btn-info" data-toggle="modal" data-target="#mensajeModal{{ pqrs.codigo }}">
-                      Ver Mensaje
+                    Ver Mensaje
                   </button>
-                  <div class="modal fade" id="mensajeModal{{ pqrs.codigo }}" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                      <div class="modal-content">
-                          <div class="modal-header">
-                          <h5 class="modal-title" id="mensajeModalLabel">Mensaje Completo</h5>
-                          </div>
-                          <div class="modal-body">
-                          {{ pqrs.mensaje }}
-                          </div>
-                          <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                          </div>
-                      </div>
-                  </div>
                 </td>
                 <td>{{ pqrs.respuesta }}</td>
                 <td class="text-left">
-                  <form action="{% url 'responder_pqrs' pqrs.codigo %}" method="POST">
-                      {% csrf_token %}
-                      <div class="form-group">
-                          <textarea id="txtrespuesta" name="txtrespuesta" class="form-control" placeholder="Responder..." rows="3" required></textarea>
-                      </div>
-                      <div style="padding-top: 5px;">
-                        <button type="submit" class="btn btn-primary">Enviar respuesta</button>
-                      </div>
+                  <form id="responseForm{{ pqrs.codigo }}" action="{% url 'responder_pqrs' pqrs.codigo %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <textarea id="txtrespuesta{{ pqrs.codigo }}" name="txtrespuesta" class="form-control" placeholder="Responder..." rows="3"></textarea>
+                    </div>
+                    <div style="padding-top: 5px;">
+                      <button type="button" class="btn btn-primary" onclick="submitResponse('{{ pqrs.codigo }}')">Enviar respuesta</button>
+                    </div>
+                    </div>
                   </form>              
                 </td>
               </tr>
-            {% empty %}
-              <tr>
-                <td colspan="8">No hay PQRS registradas</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <div class="modal fade" id="mensajeModal{{ pqrs.codigo }}" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="mensajeModalLabel">Mensaje Completo</h5>
+            </div>
+            <div class="modal-body">
+              {{ pqrs.mensaje }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+       </div>
+      {% empty %}
+        <div class="alert alert-warning" role="alert">
+          No hay PQRS registradas.
+        </div>
+      {% endfor %}
     </div>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-   
-    $(document).ready(function(){
-      $("#searchInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#tableBody tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      function submitResponse(pqrsCodigo) {
+        var respuesta = document.getElementById("txtrespuesta" + pqrsCodigo).value;
+        if (respuesta.trim() === "") {
+          alert("Por favor, ingresa una respuesta antes de enviar.");
+        } else {
+          document.getElementById("responseForm" + pqrsCodigo).submit();
+        }
+      }
+      $(document).ready(function(){
+        $("#searchInput").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $(".pqrs-card").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          });
+        });
+        $("#filterPendientes").on("click", function() {
+          $(".pqrs-card").hide();
+          $(".pqrs-card").filter(function() {
+            return $(this).text().toLowerCase().includes("pendiente");
+          }).show();
+        });
+        $("#filterRespondidas").on("click", function() {
+          $(".pqrs-card").hide();
+          $(".pqrs-card").filter(function() {
+            return $(this).text().toLowerCase().includes("respondida");
+          }).show();
+        });    
+        $("#limpiarFiltros").on("click", function() {
+          $(".pqrs-card").show();
         });
       });
-    });
-  </script>
-{% endblock %}
+    </script>
+    <style>
+      .brown-outline {
+        color: gray;
+        border-color: #8B4513;
+        background-color: transparent;
+      }
+      .brown-outline:hover {
+        background-color: transparent;
+        color: #gray;
+        border-color: #A0522D;
+      }
+    </style>
+  {% endblock %}
