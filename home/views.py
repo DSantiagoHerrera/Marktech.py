@@ -139,7 +139,8 @@ def ventaView(request):
 
 def pqrsView(request):
     pqrslistados = Pqrs.objects.all()
-    return render(request, 'home/pqrs.html', {"pqrs": pqrslistados}) 
+    return render (request, 'home/pqrs.html', {"pqrs": pqrslistados}) 
+
 
 def registrarPqrs(request):
     nombre=request.POST['txtnombre']
@@ -151,17 +152,17 @@ def registrarPqrs(request):
     pqrs=Pqrs.objects.create(
         nombre=nombre, correo=correo, telefono = telefono ,tipoPqrs=tipoPqrs, mensaje=mensaje)
     return redirect('/home')
-
 @admin_required
 def eliminarPqrs(request, codigo):
      pqrs=Pqrs.objects.get(codigo=codigo)
      pqrs.delete()
+     
      return redirect('/home/lista_pqrs')
-
 @admin_required
 def dashboardPQRS(request):
     pqrs_list = Pqrs.objects.all()
     return render(request, 'home/dashboardPQRS.html', {"pqrs_list": pqrs_list})
+
 
 def enviar_correo_respuesta(correo, asunto, mensaje):
     try:
@@ -170,12 +171,14 @@ def enviar_correo_respuesta(correo, asunto, mensaje):
     except Exception as e:
         print(f'Error al enviar el correo: {str(e)}')
 
-def responder_pqrs(request, codigo,):
+
+def responder_pqrs(request, codigo):
     pqrs = Pqrs.objects.get(codigo=codigo)
 
     if request.method == 'POST':
         respuesta = request.POST.get('txtrespuesta', '')
         pqrs.respuesta = respuesta
+        pqrs.estado = "Respondida" 
         pqrs.save()
 
         asunto = 'Respuesta PQRS'
@@ -188,7 +191,7 @@ def responder_pqrs(request, codigo,):
         except Exception as e:
             print(f'Error al enviar el correo: {str(e)}')
 
-    return render(request, 'home/dashboardPQRS.html', {"pqrs_list": Pqrs.objects.all()})
+    return render(request, 'dashboardPQRS.html', {"pqrs_list": Pqrs.objects.all()})
 
 @admin_required
 def lista_stock(request):
