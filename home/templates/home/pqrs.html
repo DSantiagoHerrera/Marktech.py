@@ -1,7 +1,6 @@
 {% extends "./base.html" %}
 
 {% block body %}
-
 <style>
     body {
         background-color: #f8f9fa;
@@ -12,7 +11,7 @@
         margin-top: 100px;
     }
 </style>
-<div class="container" style="margin-top: 150px;">
+<div class="container" style="margin-top: 150px;"> 
     <div class="row justify-content-center align-items-center">
         <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
             <div class="card">
@@ -25,7 +24,7 @@
                                 <div class="form-group">
                                     <label for="txtnombre">Nombre</label>
                                     <div class="input-group">
-                                        <input type="text" id="txtnombre" name="txtnombre" class="form-control" placeholder="Nombre" maxlength="50" required>
+                                        <input type="text" id="txtnombre" name="txtnombre" class="form-control" placeholder="Nombre" maxlength="50" required pattern="[a-zA-Z\s]{2,}" title="Ingrese al menos 2 letras">
                                         <span class="input-group-text" style="font-size: 1rem;">👤</span>
                                     </div>
                                 </div>
@@ -34,7 +33,7 @@
                                 <div class="form-group">
                                     <label for="txtcorreo">Correo electrónico</label>
                                     <div class="input-group">
-                                        <input type="text" id="txtcorreo" name="txtcorreo" class="form-control" placeholder="Correo" maxlength="50" required>
+                                        <input type="email" id="txtcorreo" name="txtcorreo" class="form-control" placeholder="Correo" maxlength="50" required pattern="[a-zA-Z0-9._%+-]+@gmail\.com" title="Ingrese un correo válido de Gmail">
                                         <span class="input-group-text" style="font-size: 1rem;">✉️</span>
                                     </div>
                                 </div>
@@ -45,7 +44,7 @@
                                 <div class="form-group">
                                     <label for="txttelefono">Teléfono</label>
                                     <div class="input-group">
-                                        <input type="text" id="txttelefono" name="txttelefono" class="form-control" placeholder="Telefono" maxlength="10" required>
+                                        <input type="tel" id="txttelefono" name="txttelefono" class="form-control" placeholder="Telefono" minlength="10" maxlength="15" required pattern="[0-9]+" title="Ingrese al menos 10 números">
                                         <span class="input-group-text" style="font-size: 1rem;">📞</span>
                                     </div>
                                 </div>
@@ -71,17 +70,17 @@
                                 <div class="form-group">
                                     <label for="txtmensaje">Mensaje</label>
                                     <div class="input-group">
-                                        <textarea id="txtmensaje" name="txtmensaje" class="form-control" placeholder="Escriba su mensaje" maxlength="1000" required></textarea>
+                                        <textarea id="txtmensaje" name="txtmensaje" class="form-control" placeholder="Escriba su mensaje" minlength="10" maxlength="1000" required></textarea>
                                         <span class="input-group-text" style="font-size: 1rem;">💬</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <div class="row justify-content-center">
+                        <div class="row justify-content-center"> 
                             <div class="col-md-3">
-                                <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-lg custom-btn">Guardar</button>
+                                <div class="form-group text-center"> 
+                                    <button type="submit" class="btn btn-lg custom-btn">Guardar</button> 
                                 </div>
                             </div>
                         </div>
@@ -106,12 +105,12 @@
 
 <style>
     .custom-btn {
-        background-color: #8B4513;
+        background-color: #8B4513; 
     }
 
     .custom-btn:hover {
-        background-color: #A0522D;
-        transform: scale(1.05);
+        background-color: #A0522D; 
+        transform: scale(1.05); 
     }
 </style>
 
@@ -121,7 +120,7 @@
         setTimeout(function() {
             document.getElementById("pqrsForm").submit();
         }, 10000);
-       
+        
         return true;
     }
 
