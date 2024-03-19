@@ -1,20 +1,53 @@
 {% extends "./home/baseAdmin.html" %}
 {% block body %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Ventas Registradas</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .btn {
+            color: white;
+        }
+        .select-label {
+            color: white;
+        }
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #fff;
+            text-align: center; /* Texto centrado */
+        }
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container">
         <h1 class="mb-4">Ventas Registradas</h1>
 
         <!-- Formulario para filtrar por mes -->
         <form method="GET" action="{% url 'lista_venta' %}">
-            <div class="form-group row">
-                <label for="mes" class="col-sm-2 col-form-label" style="color: white">Selecciona un mes:</label>
-                <div class="col-sm-4">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label for="mes" class="select-label">Selecciona un mes:</label>
                     <select name="mes" id="mes" class="form-control">
                         <option value="" {% if not request.GET.mes %} selected {% endif %}>Todos los meses</option>
                         <option value="1" {% if request.GET.mes == '1' %} selected {% endif %}>Enero</option>
@@ -31,16 +64,15 @@
                         <option value="12" {% if request.GET.mes == '12' %} selected {% endif %}>Diciembre</option>
                     </select>
                 </div>
-                <div class="col-sm-2">
-                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary mt-4">Filtrar</button>
                 </div>
-                <div class="col-sm-2">
-                    <a href="/home/productos-mas-vendidos/" class="btn btn-danger" style="color: white">Los mas Vendidos</a>
+                <div class="col-md-3">
+                    <a href="/home/productos-mas-vendidos/" class="btn btn-danger mt-4">Los más Vendidos</a>
                 </div>
-                
                 {% if request.GET.mes %}
-                <div class="col-sm-2">
-                    <a href="{% url 'lista_venta' %}" class="btn btn-secondary">Borrar Filtro</a>
+                <div class="col-md-3">
+                    <a href="{% url 'lista_venta' %}" class="btn btn-secondary mt-4">Borrar Filtro</a>
                 </div>
                 {% endif %}
             </div>
@@ -63,7 +95,7 @@
                     <td>{{ venta.total_venta }}</td>
                     <td>{{ venta.fecha }}</td>
                     <td>
-                        <a href="{% url 'detalles_venta' venta.codigo %}" class="btn btn-primary" style="color: white" >Detalles</a>
+                        <a href="{% url 'detalles_venta' venta.codigo %}" class="btn btn-primary">Detalles</a>
                     </td>
                 </tr>
                 {% empty %}
