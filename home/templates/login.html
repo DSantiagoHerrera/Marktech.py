@@ -1,5 +1,5 @@
 {% extends "./home/base.html" %}
-
+{% block body %}
 
     <title>Login</title>
     <!-- Bootstrap CSS -->
@@ -8,13 +8,15 @@
     <style>
         body {
             background-color: #f8f9fa;
+            height: 100vh; 
+            width: 100vw; 
         }
         .login-container {
             margin-top: 100px;
         }
     </style>
 </head>
-{% block body %}
+
 
 <div class="container login-container">
     <div class="row justify-content-center">
@@ -44,7 +46,6 @@
     </div>
 </div>
 
-<!-- Bootstrap JS (optional) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
 
