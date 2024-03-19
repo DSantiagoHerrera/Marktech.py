@@ -1,23 +1,13 @@
 {% extends "./base.html" %}
 
 {% block body %}
-<style>
-    body {
-        background-color: #f8f9fa;
-        height: 100vh; 
-        width: 100vw; 
-    }
-    .login-container {
-        margin-top: 100px;
-    }
-</style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
             <h2 class="text-center">Gestion de PQRS</h2>
             <div class="card">
                 <div class="card-body">
-                    <form action="/home/registrarPqrs/" method="POST">{% csrf_token %}
+                    <form id="pqrsForm" action="/home/registrarPqrs/" method="POST" onsubmit="return submitForm()">{% csrf_token %}
                         <br>
                         <div class="form-group">
                             <input type="text" id="txtnombre" name="txtnombre" class="form-control" placeholder="Nombre" maxlength="50" required>
@@ -34,7 +24,6 @@
                         <div class="col-12">
                             <label for="tipoPqrs" class="form-label">Tipo de PQRS</label>
                             <select class="form-select" id="txttipoPqrs" name="txttipoPqrs" required>
-                      
                                 <option value="">Selecciona el tipo de PQRS</option>
                                 <option value="Peticion">Petición</option>
                                 <option value="Queja">Queja</option>
@@ -59,4 +48,30 @@
         </div>
     </div>
 </div>
+<div class="modal" tabindex="-1" role="dialog" id="confirmationModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>La PQRS se ha enviado correctamente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="redirectToHome()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function submitForm() {
+        $('#confirmationModal').modal('show');
+        setTimeout(function() {
+            document.getElementById("pqrsForm").submit();
+        }, 5000); 
+        return false;
+    }
+
+    function redirectToHome() {
+        window.location.href = "/home";
+    }
+</script>
 {% endblock %}
