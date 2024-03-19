@@ -1,54 +1,80 @@
 {% extends "./base.html" %}
 
 {% block body %}
-body {
-        background-color: #f8f9fa;
-        height: 100vh; 
-        width: 100vw; 
-    }
-    .login-container {
-        margin-top: 100px;
-    }
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-            <h2 class="text-center">Gestion de PQRS</h2>
+
+
+<div class="container" style="margin-top: 150px;">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-8 col-lg-6 col-xl-6">
             <div class="card">
                 <div class="card-body">
                     <form id="pqrsForm" action="/home/registrarPqrs/" method="POST" onsubmit="return submitForm()">{% csrf_token %}
+                        <h2 class="text-center text-dark">PQRS</h2>
                         <br>
-                        <div class="form-group">
-                            <input type="text" id="txtnombre" name="txtnombre" class="form-control" placeholder="Nombre" maxlength="50" required>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <input type="text" id="txtcorreo" name="txtcorreo" class="form-control" placeholder="Correo" maxlength="50" required>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <input type="text" id="txttelefono" name="txttelefono" class="form-control" placeholder="Telefono" maxlength="10" required>
-                        </div>
-                        <br>
-                        <div class="col-12">
-                            <label for="tipoPqrs" class="form-label">Tipo de PQRS</label>
-                            <select class="form-select" id="txttipoPqrs" name="txttipoPqrs" required>
-                                <option value="">Selecciona el tipo de PQRS</option>
-                                <option value="Peticion">Petición</option>
-                                <option value="Queja">Queja</option>
-                                <option value="Reclamo">Reclamo</option>
-                                <option value="Sugerencia">Sugerencia</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Por favor selecciona el tipo de PQRS.
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="txtnombre">Nombre</label>
+                                    <div class="input-group">
+                                        <input type="text" id="txtnombre" name="txtnombre" class="form-control" placeholder="Nombre" maxlength="50" required>
+                                        <span class="input-group-text" style="font-size: 1rem;">👤</span>
+                                    </div>
+                                </div>
                             </div>
-                            <br>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="txtcorreo">Correo electrónico</label>
+                                    <div class="input-group">
+                                        <input type="text" id="txtcorreo" name="txtcorreo" class="form-control" placeholder="Correo" maxlength="50" required>
+                                        <span class="input-group-text" style="font-size: 1rem;">✉️</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <input type="text" id="txtmensaje" name="txtmensaje" class="form-control" placeholder="Escriba su peticion" maxlength="1000" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="txttelefono">Teléfono</label>
+                                    <div class="input-group">
+                                        <input type="text" id="txttelefono" name="txttelefono" class="form-control" placeholder="Telefono" maxlength="10" required>
+                                        <span class="input-group-text" style="font-size: 1rem;">📞</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="txttipoPqrs">Tipo de PQRS</label>
+                                    <select class="form-select" id="txttipoPqrs" name="txttipoPqrs" required>
+                                        <option value="">Selecciona el tipo de PQRS</option>
+                                        <option value="Peticion">Petición</option>
+                                        <option value="Queja">Queja</option>
+                                        <option value="Reclamo">Reclamo</option>
+                                        <option value="Sugerencia">Sugerencia</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor selecciona el tipo de PQRS.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="txtmensaje">Mensaje</label>
+                                    <div class="input-group">
+                                        <textarea id="txtmensaje" name="txtmensaje" class="form-control" placeholder="Escriba su mensaje" maxlength="1000" required></textarea>
+                                        <span class="input-group-text" style="font-size: 1rem;">💬</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <br>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-success btn-block">Guardar</button>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3">
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-lg custom-btn">Guardar</button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -69,13 +95,25 @@ body {
     </div>
 </div>
 
+<style>
+    .custom-btn {
+        background-color: #8B4513;
+    }
+
+    .custom-btn:hover {
+        background-color: #A0522D;
+        transform: scale(1.05);
+    }
+</style>
+
 <script>
     function submitForm() {
         $('#confirmationModal').modal('show');
         setTimeout(function() {
             document.getElementById("pqrsForm").submit();
-        }, 5000); 
-        return false;
+        }, 10000);
+       
+        return true;
     }
 
     function redirectToHome() {
