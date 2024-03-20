@@ -90,8 +90,12 @@
             var totalVenta = parseFloat(document.getElementById('totalVenta').value);
             var montoPagado = parseFloat(document.getElementById('montoPagado').value);
             if (!isNaN(totalVenta) && !isNaN(montoPagado)) {
-                var cambio = montoPagado - totalVenta;
-                document.getElementById('cambio').value = cambio;
+                if (montoPagado < totalVenta) {
+                    alert('Monto cobrado inferior al total de la venta');
+                } else {
+                    var cambio = montoPagado - totalVenta;
+                    document.getElementById('cambio').value = cambio;
+                }
             } else {
                 alert('Por favor ingrese un monto válido.');
             }
